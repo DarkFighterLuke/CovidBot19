@@ -506,9 +506,7 @@ func setCaptionAndamentoNazionale() string {
 
 func (app *application) callbackHandler(cq *tbot.CallbackQuery) {
 	writeOperation(cq)
-	fmt.Println(app.lastButton)
-	fmt.Println(app.lastRegion)
-	fmt.Println(app.lastProvince)
+
 	switch strings.ToLower(cq.Data) {
 	case "credits":
 		app.credits(cq.Message)
