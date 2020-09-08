@@ -22,6 +22,7 @@ const (
 	logsFolder  = "/logs/"
 )
 
+// User runtime data struct
 type application struct {
 	client                  *tbot.Client
 	dailyUpdate             bool
@@ -32,19 +33,24 @@ type application struct {
 	choicesConfrontoRegione []string
 }
 
-var nationData []covidgraphs.NationData
-var regionsData []covidgraphs.RegionData
-var provincesData []covidgraphs.ProvinceData
-var datiNote []covidgraphs.NoteData
+var nationData []covidgraphs.NationData      // National data array
+var regionsData []covidgraphs.RegionData     // Regional data array
+var provincesData []covidgraphs.ProvinceData // Provincial data array
+var datiNote []covidgraphs.NoteData          // Notes array
 
-var natregAttributes = []string{"ricoverati_con_sintomi", "terapia_intensiva", "totale_ospedalizzati", "isolamento_domiciliare", "totale_positivi", "nuovi_positivi", "dimessi_guariti", "deceduti", "totale_casi", "tamponi"}
-var reports = []string{"generale"}
+var natregAttributes = []string{"ricoverati_con_sintomi", "terapia_intensiva", "totale_ospedalizzati",
+	"isolamento_domiciliare", "totale_positivi", "nuovi_positivi", "dimessi_guariti", "deceduti",
+	"totale_casi", "tamponi"} // National and regional fields names
 
-var mutex = &sync.Mutex{}
+var reports = []string{"generale"} // Types of reports avvailable
+
+var mutex = &sync.Mutex{} // Mutex used when updating data from the pcm-dpc repo
 
 func main() {
 	log.SetOutput(os.Stdout)
 	updateData(&nationData, &regionsData, &provincesData, &datiNote)()
+
+	// Planning cronjobs to update data from pcm-dpc repo
 	var cronjob = cron.New()
 	cronjob.AddFunc("TZ=Europe/Rome 15 17 * * *", updateData(&nationData, &regionsData, &provincesData, &datiNote))
 	cronjob.AddFunc("TZ=Europe/Rome 40 17 * * *", updateData(&nationData, &regionsData, &provincesData, &datiNote))
@@ -52,11 +58,13 @@ func main() {
 	cronjob.AddFunc("TZ=Europe/Rome 05 18 * * *", updateData(&nationData, &regionsData, &provincesData, &datiNote))
 	cronjob.Start()
 
+	// Creating bot instance using long polling mode
 	bot := tbot.New(os.Getenv("CovidBot"))
 
 	app := &application{}
 	app.client = bot.Client()
 
+	// Handling "start" command
 	bot.HandleMessage("/start", func(m *tbot.Message) {
 		if m.Chat.Type == "private" {
 			buttons, err := makeButtons([]string{"Credits 🌟", "Vai ai Dati 📊"}, []string{"credits", "home"}, 1)
@@ -85,19 +93,26 @@ func main() {
 			}
 		}
 	})
+
+	// Handling textual commands
 	bot.HandleMessage("/nazione *", app.textNation)
 	bot.HandleMessage("/regione *", app.textRegion)
 	bot.HandleMessage("/provincia *", app.textProvince)
 	bot.HandleMessage("/reports *", app.textReport)
 	bot.HandleMessage("/home", app.home)
 	bot.HandleMessage("/credits", app.credits)
+
+	// Handling buttons callbacks
 	bot.HandleCallback(app.callbackHandler)
+
+	// Starting bot instance
 	err := bot.Start()
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
+// Handles "home" command
 func (app *application) home(m *tbot.Message) {
 	log.Println("[HOME] Nation: " + fmt.Sprint(nationData) + "\nRegions: " + fmt.Sprint(regionsData) + "\nProvinces: " + fmt.Sprint(provincesData) + "\t" + m.Chat.FirstName + "\n")
 	if m.Chat.Type == "private" {
@@ -110,6 +125,7 @@ func (app *application) home(m *tbot.Message) {
 	}
 }
 
+// Handles "report" textual command
 func (app *application) textReport(m *tbot.Message) {
 	message := strings.Replace(m.Text, "/reports ", "", 1)
 	var fieldNames []string
@@ -174,6 +190,7 @@ func (app *application) textReport(m *tbot.Message) {
 	}
 }
 
+// Handles "nazione" textual command
 func (app *application) textNation(m *tbot.Message) {
 	message := strings.Replace(m.Text, "/nazione ", "", 1)
 	var fieldNames []string
@@ -236,6 +253,7 @@ func (app *application) textNation(m *tbot.Message) {
 	}
 }
 
+// Handles "regione" textual command
 func (app *application) textRegion(m *tbot.Message) {
 	curPath, _ := os.Getwd()
 	dirPath := curPath + imageFolder
@@ -316,6 +334,7 @@ func (app *application) textRegion(m *tbot.Message) {
 	}
 }
 
+// Handles "provincia" textual command
 func (app *application) textProvince(m *tbot.Message) {
 	curPath, _ := os.Getwd()
 	dirPath := curPath + imageFolder
@@ -412,6 +431,7 @@ func (app *application) textProvince(m *tbot.Message) {
 	}
 }
 
+// Updates data from pcm-dpc repository
 func updateData(nazione *[]covidgraphs.NationData, regioni *[]covidgraphs.RegionData, province *[]covidgraphs.ProvinceData, note *[]covidgraphs.NoteData) func() {
 	return func() {
 		mutex.Lock()
@@ -427,7 +447,7 @@ func updateData(nazione *[]covidgraphs.NationData, regioni *[]covidgraphs.Region
 
 		ptrRegioni, err := covidgraphs.GetRegions()
 		if err != nil {
-			log.Println("errore nell'aggiornamento dei dati zone'")
+			log.Println("errore nell'aggiornamento dei dati zonesButtons'")
 		}
 		*regioni = *ptrRegioni
 
@@ -446,6 +466,7 @@ func updateData(nazione *[]covidgraphs.NationData, regioni *[]covidgraphs.Region
 	}
 }
 
+// Sends national trend plot and text with related buttons
 func (app *application) sendAndamentoNazionale(m *tbot.Message) {
 	curPath, _ := os.Getwd()
 	dirPath := curPath + imageFolder
@@ -467,6 +488,7 @@ func (app *application) sendAndamentoNazionale(m *tbot.Message) {
 	app.client.SendPhotoFile(m.Chat.ID, filename, tbot.OptCaption(setCaptionAndamentoNazionale()), tbot.OptParseModeHTML)
 }
 
+// Returns the caption for the national trend plot image
 func setCaptionAndamentoNazionale() string {
 	lastIndex := len(nationData) - 1
 	_, nuoviTotale := covidgraphs.CalculateDelta(nationData[lastIndex-1].Totale_casi, nationData[lastIndex].Totale_casi)
@@ -504,6 +526,7 @@ func setCaptionAndamentoNazionale() string {
 	return msg
 }
 
+// Recognize received buttons callbacks
 func (app *application) callbackHandler(cq *tbot.CallbackQuery) {
 	writeOperation(cq)
 
@@ -534,7 +557,7 @@ func (app *application) callbackHandler(cq *tbot.CallbackQuery) {
 		}
 		app.client.SendPhotoFile(cq.Message.Chat.ID, filename, tbot.OptCaption(setCaptionConfrontoNazione(len(nationData)-1, []string{"nuovi_positivi"})), tbot.OptInlineKeyboardMarkup(buttons), tbot.OptParseModeHTML)
 		app.client.AnswerCallbackQuery(cq.ID, tbot.OptText("Nuovi casi"))
-		app.lastButton = "zone"
+		app.lastButton = "zonesButtons"
 		app.lastRegion = ""
 		app.lastProvince = ""
 		break
@@ -579,8 +602,8 @@ func (app *application) callbackHandler(cq *tbot.CallbackQuery) {
 		app.lastRegion = ""
 		app.lastProvince = ""
 		break
-	case "zone":
-		buttons, err := app.zone()
+	case "zonesButtons":
+		buttons, err := app.zonesButtons()
 		if err != nil {
 			log.Println(err)
 		}
@@ -613,7 +636,7 @@ func (app *application) callbackHandler(cq *tbot.CallbackQuery) {
 		}
 		app.client.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.MessageID, tbot.OptText("Seleziona i campi che vuoi mettere a confronto:"), tbot.OptInlineKeyboardMarkup(buttons))
 		app.client.AnswerCallbackQuery(cq.ID, tbot.OptText("Crea confronto dati nazione"))
-		app.lastButton = "zone"
+		app.lastButton = "zonesButtons"
 		app.lastRegion = ""
 		app.lastProvince = ""
 		break
@@ -645,7 +668,7 @@ func (app *application) callbackHandler(cq *tbot.CallbackQuery) {
 			return
 		}
 		app.client.SendMessage(cq.Message.Chat.ID, setCaptionTopRegions(), tbot.OptInlineKeyboardMarkup(homeButton), tbot.OptParseModeHTML)
-		app.client.AnswerCallbackQuery(cq.ID, tbot.OptText("Classifica zone"))
+		app.client.AnswerCallbackQuery(cq.ID, tbot.OptText("Classifica zonesButtons"))
 		break
 	case "classifica province":
 		//TODO: grafico a barre classifica
@@ -814,6 +837,7 @@ func (app *application) callbackHandler(cq *tbot.CallbackQuery) {
 
 }
 
+// Creates buttons sets
 func makeButtons(buttonsText []string, callbacksData []string, layout int) (*tbot.InlineKeyboardMarkup, error) {
 	if layout != 1 && layout != 2 {
 		return nil, fmt.Errorf("wrong layout")
@@ -851,6 +875,7 @@ func makeButtons(buttonsText []string, callbacksData []string, layout int) (*tbo
 	return &tbot.InlineKeyboardMarkup{InlineKeyboard: keys}, nil
 }
 
+// Returns the caption for the regions top 10
 func setCaptionTopRegions() string {
 	top := covidgraphs.GetTopTenRegionsTotaleContagi(&regionsData)
 	var msg = "<b>Top " + strconv.Itoa(nTopRegions) + " regioni per contagi</b>\n\n"
@@ -861,6 +886,7 @@ func setCaptionTopRegions() string {
 	return msg
 }
 
+// Returns the caption for the provinces top 10
 func setCaptionTopProvinces() string {
 	top := covidgraphs.GetTopTenProvincesTotaleContagi(&provincesData)
 	var msg = "<b>Top " + strconv.Itoa(nTopRegions) + " province per contagi</b>\n\n"
@@ -871,6 +897,7 @@ func setCaptionTopProvinces() string {
 	return msg
 }
 
+// Recognizes the callback of regions named buttons
 func (app *application) caseRegion(cq *tbot.CallbackQuery) {
 	regionIndex, err := covidgraphs.FindLastOccurrenceRegion(&regionsData, "denominazione_regione", cq.Data)
 	if err != nil {
@@ -895,6 +922,7 @@ func (app *application) caseRegion(cq *tbot.CallbackQuery) {
 	app.lastProvince = ""
 }
 
+// Sends a region trend plot and text with related buttons
 func (app *application) sendAndamentoRegionale(m *tbot.Message, regionIndex int) {
 	firstRegionIndex, err := covidgraphs.FindFirstOccurrenceRegion(&regionsData, "codice_regione", regionsData[regionIndex].Codice_regione)
 	if err != nil {
@@ -928,6 +956,7 @@ func (app *application) sendAndamentoRegionale(m *tbot.Message, regionIndex int)
 	app.client.SendPhotoFile(m.Chat.ID, filename, tbot.OptCaption(setCaptionRegion(regionIndex)), tbot.OptParseModeHTML)
 }
 
+// Returns the caption for a regional trend plot image
 func setCaptionRegion(regionId int) string {
 	_, nuoviTotale := covidgraphs.CalculateDelta(regionsData[regionId-21].Totale_casi, regionsData[regionId].Totale_casi)
 	_, nuoviGuariti := covidgraphs.CalculateDelta(regionsData[regionId-21].Dimessi_guariti, regionsData[regionId].Dimessi_guariti)
@@ -974,6 +1003,7 @@ func setCaptionRegion(regionId int) string {
 	return msg
 }
 
+// Recognizes the callback of regions named buttons
 func (app *application) caseProvince(cq *tbot.CallbackQuery) {
 	provinceIndex, err := covidgraphs.FindLastOccurrenceProvince(&provincesData, "denominazione_provincia", cq.Data)
 	if err != nil {
@@ -984,6 +1014,7 @@ func (app *application) caseProvince(cq *tbot.CallbackQuery) {
 	app.sendAndamentoProvinciale(cq, provinceIndex)
 }
 
+// Sends a province trend plot and text with related buttons
 func (app *application) sendAndamentoProvinciale(cq *tbot.CallbackQuery, provinceIndex int) {
 	firstProvinceIndex, err := covidgraphs.FindFirstOccurrenceProvince(&provincesData, "denominazione_provincia", provincesData[provinceIndex].Denominazione_provincia)
 	if err != nil {
@@ -1028,6 +1059,7 @@ func (app *application) sendAndamentoProvinciale(cq *tbot.CallbackQuery, provinc
 	app.lastProvince = cq.Data
 }
 
+// Returns the caption for a provincial trend plot image
 func setCaptionProvince(provinceId int) string {
 	_, nuoviTotale := covidgraphs.CalculateDelta(provincesData[provinceId-covidgraphs.ProvinceOffset].Totale_casi, provincesData[provinceId].Totale_casi)
 	_, nuoviPositivi := covidgraphs.CalculateDelta(provincesData[provinceId-covidgraphs.ProvinceOffset].NuoviCasi, provincesData[provinceId].NuoviCasi)
@@ -1060,10 +1092,11 @@ func setCaptionProvince(provinceId int) string {
 	return msg
 }
 
+// Handles "Annulla" button callback to go back according to the current context
 func (app *application) back(cq *tbot.CallbackQuery) {
 	writeOperation(cq)
 	switch app.lastButton {
-	case "zone":
+	case "zonesButtons":
 		buttons, err := app.mainMenuButtons()
 		if err != nil {
 			log.Println(err)
@@ -1087,34 +1120,34 @@ func (app *application) back(cq *tbot.CallbackQuery) {
 		app.choicesConfrontoNazione = make([]string, 0)
 		break
 	case "nord":
-		buttons, err := app.zone()
+		buttons, err := app.zonesButtons()
 		if err != nil {
 			log.Println(err)
 			return
 		}
 		app.client.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.MessageID, tbot.OptInlineKeyboardMarkup(buttons))
 		app.client.AnswerCallbackQuery(cq.ID, tbot.OptText("Annulla"))
-		app.lastButton = "zone"
+		app.lastButton = "zonesButtons"
 		break
 	case "centro":
-		buttons, err := app.zone()
+		buttons, err := app.zonesButtons()
 		if err != nil {
 			log.Println(err)
 			return
 		}
 		app.client.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.MessageID, tbot.OptInlineKeyboardMarkup(buttons))
 		app.client.AnswerCallbackQuery(cq.ID, tbot.OptText("Annulla"))
-		app.lastButton = "zone"
+		app.lastButton = "zonesButtons"
 		break
 	case "sud":
-		buttons, err := app.zone()
+		buttons, err := app.zonesButtons()
 		if err != nil {
 			log.Println(err)
 			return
 		}
 		app.client.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.MessageID, tbot.OptInlineKeyboardMarkup(buttons))
 		app.client.AnswerCallbackQuery(cq.ID, tbot.OptText("Annulla"))
-		app.lastButton = "zone"
+		app.lastButton = "zonesButtons"
 		break
 	case "reports":
 		app.client.DeleteMessage(cq.Message.Chat.ID, cq.Message.MessageID)
@@ -1124,11 +1157,12 @@ func (app *application) back(cq *tbot.CallbackQuery) {
 	}
 }
 
+// Creates the main menu buttons set
 func (app *application) mainMenuButtons() (*tbot.InlineKeyboardMarkup, error) {
 	//buttonsNames := []string{"Storico 🕑", "Regioni", "Vai a regione ➡️", "Vai a provincia ➡️", "Crea confronto su dati nazione 📈", "Classifica regioni 🏅", "Classifica province 🏅"}
 	buttonsNames := []string{"Nuovi casi 🆕", "Regioni", "Crea confronto su dati nazione 📈", "Classifica regioni 🏅", "Classifica province 🏅", "Reports 📃"}
-	//callbackData := []string{"storico nazione", "zone", "vai a regione", "vai a provincia", "crea confronto su dati nazione", "classifica regioni", "classifica province"}
-	callbackData := []string{"nuovi casi nazione", "zone", "confronto dati nazione", "classifica regioni", "classifica province", "reports"}
+	//callbackData := []string{"storico nazione", "zonesButtons", "vai a regione", "vai a provincia", "crea confronto su dati nazione", "classifica regioni", "classifica province"}
+	callbackData := []string{"nuovi casi nazione", "zonesButtons", "confronto dati nazione", "classifica regioni", "classifica province", "reports"}
 	buttons, err := makeButtons(buttonsNames, callbackData, 1)
 	if err != nil {
 		log.Println(err)
@@ -1140,7 +1174,8 @@ func (app *application) mainMenuButtons() (*tbot.InlineKeyboardMarkup, error) {
 	return buttons, nil
 }
 
-func (app *application) zone() (*tbot.InlineKeyboardMarkup, error) {
+// Creates zones buttons set
+func (app *application) zonesButtons() (*tbot.InlineKeyboardMarkup, error) {
 	zones := []string{"Nord", "Centro", "Sud"}
 	zonesCallback := make([]string, 0)
 	for _, v := range zones {
@@ -1156,6 +1191,7 @@ func (app *application) zone() (*tbot.InlineKeyboardMarkup, error) {
 	return buttons, nil
 }
 
+// Creates provinces buttons set
 func (app *application) provinceButtons() (*tbot.InlineKeyboardMarkup, error) {
 	buttonsNames := []string{"Nuovi casi 🆕", "Province della regione", "Confronto dati regione 📈", "Torna alla home"}
 	callbackNames := []string{"nuovi casi regione", "province", "confronto dati regione", "home"}
@@ -1168,6 +1204,7 @@ func (app *application) provinceButtons() (*tbot.InlineKeyboardMarkup, error) {
 	return buttons, nil
 }
 
+// Creates northern regions buttons set
 func (app *application) nordRegions() (*tbot.InlineKeyboardMarkup, error) {
 	regions := covidgraphs.GetNordRegionsNamesList()
 	regionsCallback := make([]string, 0)
@@ -1184,6 +1221,7 @@ func (app *application) nordRegions() (*tbot.InlineKeyboardMarkup, error) {
 	return buttons, nil
 }
 
+// Creates central regions buttons set
 func (app *application) centroRegions() (*tbot.InlineKeyboardMarkup, error) {
 	regions := covidgraphs.GetCentroRegionsNamesList()
 	regionsCallback := make([]string, 0)
@@ -1200,6 +1238,7 @@ func (app *application) centroRegions() (*tbot.InlineKeyboardMarkup, error) {
 	return buttons, nil
 }
 
+// Creates southern regions buttons set
 func (app *application) sudRegions() (*tbot.InlineKeyboardMarkup, error) {
 	regions := covidgraphs.GetSudRegionsNamesList()
 	regionsCallback := make([]string, 0)
@@ -1216,6 +1255,7 @@ func (app *application) sudRegions() (*tbot.InlineKeyboardMarkup, error) {
 	return buttons, nil
 }
 
+// Handles "Confronto dati regione" selected fields
 func (app *application) caseConfrontoRegione(cq *tbot.CallbackQuery) error {
 	buttonsNames := []string{"Ricoverati con sintomi", "Terapia intensiva", "Totale ospedalizzati", "Isolamento domiciliare", "Attualmente positivi", "Nuovi positivi", "Dimessi guariti", "Deceduti", "Totale casi", "Tamponi"}
 	buttonsCallback := make([]string, 0)
@@ -1536,6 +1576,7 @@ func (app *application) caseConfrontoRegione(cq *tbot.CallbackQuery) error {
 	return nil
 }
 
+// Sends a plot with a caption containing a comparison with the selected regional fields
 func (app *application) sendConfrontoDatiRegione(cq *tbot.CallbackQuery) {
 	snakeCaseChoices := make([]string, 0)
 	for _, v := range app.choicesConfrontoRegione {
@@ -1593,6 +1634,7 @@ func (app *application) sendConfrontoDatiRegione(cq *tbot.CallbackQuery) {
 	app.client.AnswerCallbackQuery(cq.ID, tbot.OptText("Confronto effettuato"))
 }
 
+// Returns the caption for the requested regional fields comparison plot
 func setCaptionConfrontoRegione(regionId int, fieldsNames []string) string {
 	_, nuoviTotale := covidgraphs.CalculateDelta(regionsData[regionId-21].Totale_casi, regionsData[regionId].Totale_casi)
 	_, nuoviGuariti := covidgraphs.CalculateDelta(regionsData[regionId-21].Dimessi_guariti, regionsData[regionId].Dimessi_guariti)
@@ -1664,6 +1706,7 @@ func setCaptionConfrontoRegione(regionId int, fieldsNames []string) string {
 	return msg
 }
 
+// Checks if a string is found in national fields selected for comparison
 func (app *application) isStringFoundInRegionChoices(str string) bool {
 	for _, j := range app.choicesConfrontoRegione {
 		if j == strings.ToLower(str) {
@@ -1673,6 +1716,7 @@ func (app *application) isStringFoundInRegionChoices(str string) bool {
 	return false
 }
 
+// Handles "Confronto dati nazione" selected fields
 func (app *application) caseConfrontoNazione(cq *tbot.CallbackQuery) error {
 	buttonsNames := []string{"Ricoverati con sintomi", "Terapia intensiva", "Totale ospedalizzati", "Isolamento domiciliare", "Attualmente positivi", "Nuovi positivi", "Dimessi guariti", "Deceduti", "Totale casi", "Tamponi"}
 	buttonsCallback := make([]string, 0)
@@ -1993,6 +2037,7 @@ func (app *application) caseConfrontoNazione(cq *tbot.CallbackQuery) error {
 	return nil
 }
 
+// Sends a plot with a caption containing a comparison with the selected national fields
 func (app *application) sendConfrontoDatiNazione(cq *tbot.CallbackQuery) {
 	snakeCaseChoices := make([]string, 0)
 	for _, v := range app.choicesConfrontoNazione {
@@ -2040,6 +2085,7 @@ func (app *application) sendConfrontoDatiNazione(cq *tbot.CallbackQuery) {
 	app.client.AnswerCallbackQuery(cq.ID, tbot.OptText("Confronto effettuato"))
 }
 
+// Returns the caption for the requested national fields comparison plot
 func setCaptionConfrontoNazione(nationId int, fieldsNames []string) string {
 	_, nuoviTotale := covidgraphs.CalculateDelta(nationData[nationId-1].Totale_casi, nationData[nationId].Totale_casi)
 	_, nuoviGuariti := covidgraphs.CalculateDelta(nationData[nationId-1].Dimessi_guariti, nationData[nationId].Dimessi_guariti)
@@ -2111,6 +2157,7 @@ func setCaptionConfrontoNazione(nationId int, fieldsNames []string) string {
 	return msg
 }
 
+// Checks if a string is found in national fields selected for comparison
 func (app *application) isStringFoundInNationChoices(str string) bool {
 	for _, j := range app.choicesConfrontoNazione {
 		if j == strings.ToLower(str) {
@@ -2120,6 +2167,7 @@ func (app *application) isStringFoundInNationChoices(str string) bool {
 	return false
 }
 
+// Returns a caption with the selected province fields data
 func setCaptionConfrontoProvincia(provinceId int, fieldsNames []string) string {
 	_, nuoviTotale := covidgraphs.CalculateDelta(provincesData[provinceId-covidgraphs.ProvinceOffset].Totale_casi, provincesData[provinceId].Totale_casi)
 	_, nuoviPositivi := covidgraphs.CalculateDelta(provincesData[provinceId-covidgraphs.ProvinceOffset].NuoviCasi, provincesData[provinceId].NuoviCasi)
@@ -2143,6 +2191,7 @@ func setCaptionConfrontoProvincia(provinceId int, fieldsNames []string) string {
 	return msg
 }
 
+// Logs operations to a file named with telegram username/name_surname
 func writeOperation(cq *tbot.CallbackQuery) {
 	data, err := json.Marshal(cq)
 	if err != nil {
@@ -2176,6 +2225,7 @@ func writeOperation(cq *tbot.CallbackQuery) {
 	log.Println(dataString)
 }
 
+// Sends credits message
 func (app *application) credits(m *tbot.Message) {
 	buttons, err := makeButtons([]string{"Torna alla Home"}, []string{"home"}, 1)
 	if err != nil {
@@ -2185,6 +2235,7 @@ func (app *application) credits(m *tbot.Message) {
 		"\n🌐 Proudly hosted on Raspberry Pi 3 powered by Arch Linux", tbot.OptInlineKeyboardMarkup(buttons))
 }
 
+// Sorts regional fields selected for comparison
 func (app *application) getSortedChoicesConfrontoRegione() []string {
 	tempChoices := make([]string, len(app.choicesConfrontoRegione))
 	copy(tempChoices, app.choicesConfrontoRegione)
@@ -2193,6 +2244,7 @@ func (app *application) getSortedChoicesConfrontoRegione() []string {
 	return tempChoices
 }
 
+// Sorts national fields selected for comparison
 func (app *application) getSortedChoicesConfrontoNazione() []string {
 	tempChoices := make([]string, len(app.choicesConfrontoNazione))
 	copy(tempChoices, app.choicesConfrontoRegione)
