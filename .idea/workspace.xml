@@ -19,7 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c55a33a7-fbcd-4eb1-9cf8-e2a8d011c763" name="Default Changelist" comment="Removed some useless log messagesz">
+    <list default="true" id="c55a33a7-fbcd-4eb1-9cf8-e2a8d011c763" name="Default Changelist" comment="Added some comments&#10;Renamed zone() function to zonesButtons()">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
@@ -114,7 +114,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Removed some useless log messages" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed some useless log messages" />
+    <MESSAGE value="Added some comments&#10;Renamed zone() function to zonesButtons()" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added some comments&#10;Renamed zone() function to zonesButtons()" />
   </component>
   <component name="WindowStateProjectService">
     <state x="418" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1599466984430">
@@ -145,13 +146,14 @@
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595949490475" />
     <state width="1866" height="268" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1599497614516" />
-    <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2" timestamp="1599579429438">
+    <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2" timestamp="1599598476550">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1599579429438" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1597072683933">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1599598476550" />
+    <state x="623" y="226" width="672" height="681" key="search.everywhere.popup" timestamp="1599598440863">
+      <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1597072683933" />
+    <state x="623" y="226" width="672" height="681" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1599598440863" />
   </component>
 </project>

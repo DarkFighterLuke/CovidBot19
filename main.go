@@ -8,7 +8,6 @@ import (
 	"github.com/yanzay/tbot"
 	"log"
 	"os"
-	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -24,13 +23,13 @@ const (
 
 // User runtime data struct
 type application struct {
-	client                  *tbot.Client
-	dailyUpdate             bool
-	lastButton              string
-	lastRegion              string
-	lastProvince            string
-	choicesConfrontoNazione []string
-	choicesConfrontoRegione []string
+	client                  *tbot.Client // Client instance representing the user using the bot
+	dailyUpdate             bool         // This is a spoiler for a future feature
+	lastButton              string       // Callback of the last pressed button
+	lastRegion              string       // Callback of the last pressed button in case it is a region name
+	lastProvince            string       // Callback of the last pressed button in case it is a province name
+	choicesConfrontoNazione []string     // National fields selected for comparison
+	choicesConfrontoRegione []string     // Regional fields selected for comparison
 }
 
 var nationData []covidgraphs.NationData      // National data array
@@ -901,10 +900,6 @@ func setCaptionTopProvinces() string {
 func (app *application) caseRegion(cq *tbot.CallbackQuery) {
 	regionIndex, err := covidgraphs.FindLastOccurrenceRegion(&regionsData, "denominazione_regione", cq.Data)
 	if err != nil {
-		pc := make([]uintptr, 10) // at least 1 entry needed
-		runtime.Callers(2, pc)
-		f := runtime.FuncForPC(pc[0])
-		log.Printf("[func %v] region not found %v", f.Name(), err)
 		app.client.AnswerCallbackQuery(cq.ID, tbot.OptText("Si è verificato un errore"))
 		return
 	}
@@ -926,10 +921,6 @@ func (app *application) caseRegion(cq *tbot.CallbackQuery) {
 func (app *application) sendAndamentoRegionale(m *tbot.Message, regionIndex int) {
 	firstRegionIndex, err := covidgraphs.FindFirstOccurrenceRegion(&regionsData, "codice_regione", regionsData[regionIndex].Codice_regione)
 	if err != nil {
-		/*pc := make([]uintptr, 10) // at least 1 entry needed
-		runtime.Callers(2, pc)
-		f := runtime.FuncForPC(pc[0])
-		log.Printf("[func %v] %v", f.Name(), err)*/
 		app.client.SendMessage(m.Chat.ID, "Impossibile reperire il grafico al momento.\nRiprova più tardi.")
 		return
 	}
@@ -944,10 +935,6 @@ func (app *application) sendAndamentoRegionale(m *tbot.Message, regionIndex int)
 		err, filename = covidgraphs.VociRegione(&regionsData, []string{"totale_casi", "dimessi_guariti", "deceduti"}, 0, firstRegionIndex, title, filename)
 
 		if err != nil {
-			/*pc := make([]uintptr, 10) // at least 1 entry needed
-			runtime.Callers(2, pc)
-			f := runtime.FuncForPC(pc[0])
-			log.Printf("[func %v] %v", f.Name(), err)*/
 			app.client.SendMessage(m.Chat.ID, "Impossibile reperire il grafico al momento.\nRiprova più tardi.")
 			return
 		}
@@ -1018,10 +1005,6 @@ func (app *application) caseProvince(cq *tbot.CallbackQuery) {
 func (app *application) sendAndamentoProvinciale(cq *tbot.CallbackQuery, provinceIndex int) {
 	firstProvinceIndex, err := covidgraphs.FindFirstOccurrenceProvince(&provincesData, "denominazione_provincia", provincesData[provinceIndex].Denominazione_provincia)
 	if err != nil {
-		pc := make([]uintptr, 10) // at least 1 entry needed
-		runtime.Callers(2, pc)
-		f := runtime.FuncForPC(pc[0])
-		log.Printf("[func %v] %v", f.Name(), err)
 		return
 	}
 
@@ -1035,10 +1018,6 @@ func (app *application) sendAndamentoProvinciale(cq *tbot.CallbackQuery, provinc
 		err, filename = covidgraphs.TotalePositiviProvincia(&provincesData, 0, firstProvinceIndex, title, filename)
 
 		if err != nil {
-			/*pc := make([]uintptr, 10) // at least 1 entry needed
-			runtime.Callers(2, pc)
-			f := runtime.FuncForPC(pc[0])
-			log.Printf("[func %v] %v", f.Name(), err)*/
 			app.client.SendMessage(cq.Message.Chat.ID, "Impossibile reperire il grafico al momento.\nRiprova più tardi.")
 			return
 		}
