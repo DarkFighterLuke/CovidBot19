@@ -16,10 +16,13 @@ import (
 )
 
 const (
-	nTopRegions = 10
-	imageFolder = "/plots/"
-	logsFolder  = "/logs/"
+	nTopRegions      = 10
+	botDataDirectory = "/CovidBot/"
+	imageFolder      = "/plots/"
+	logsFolder       = "/logs/"
 )
+
+var workingDirectory string
 
 // User runtime data struct
 type application struct {
@@ -45,8 +48,18 @@ var reports = []string{"generale"} // Types of reports avvailable
 
 var mutex = &sync.Mutex{} // Mutex used when updating data from the pcm-dpc repo
 
+// Creates bot data folders if they don't exist
+func initFolders() {
+	currentPath, _ := os.Getwd()
+	workingDirectory = currentPath + botDataDirectory
+	os.MkdirAll(workingDirectory, 0655)
+	os.MkdirAll(workingDirectory+imageFolder, 0655)
+	os.MkdirAll(workingDirectory+logsFolder, 0655)
+}
+
 func main() {
 	log.SetOutput(os.Stdout)
+	initFolders()
 	updateData(&nationData, &regionsData, &provincesData, &datiNote)()
 
 	// Planning cronjobs to update data from pcm-dpc repo
@@ -223,8 +236,7 @@ func (app *application) textNation(m *tbot.Message) {
 			}
 		}
 
-		curPath, _ := os.Getwd()
-		dirPath := curPath + imageFolder
+		dirPath := workingDirectory + imageFolder
 		titleForFilename := "Nazione" + fmt.Sprintf("%s_%s_%s", titleAttributes[0], titleAttributes[1], titleAttributes[2])
 		title := "Confronto dati nazione"
 		var filename string
@@ -254,8 +266,7 @@ func (app *application) textNation(m *tbot.Message) {
 
 // Handles "regione" textual command
 func (app *application) textRegion(m *tbot.Message) {
-	curPath, _ := os.Getwd()
-	dirPath := curPath + imageFolder
+	dirPath := workingDirectory + imageFolder
 
 	message := strings.Replace(m.Text, "/regione ", "", 1)
 	var fieldNames []string
@@ -335,8 +346,7 @@ func (app *application) textRegion(m *tbot.Message) {
 
 // Handles "provincia" textual command
 func (app *application) textProvince(m *tbot.Message) {
-	curPath, _ := os.Getwd()
-	dirPath := curPath + imageFolder
+	dirPath := workingDirectory + imageFolder
 
 	message := strings.Replace(m.Text, "/provincia ", "", 1)
 	tokens := strings.Split(message, " ")
@@ -467,8 +477,8 @@ func updateData(nazione *[]covidgraphs.NationData, regioni *[]covidgraphs.Region
 
 // Sends national trend plot and text with related buttons
 func (app *application) sendAndamentoNazionale(m *tbot.Message) {
-	curPath, _ := os.Getwd()
-	dirPath := curPath + imageFolder
+
+	dirPath := workingDirectory + imageFolder
 	title := "Andamento nazionale"
 	var filename string
 	var err error
@@ -534,8 +544,7 @@ func (app *application) callbackHandler(cq *tbot.CallbackQuery) {
 		app.credits(cq.Message)
 		app.client.AnswerCallbackQuery(cq.ID, tbot.OptText("Crediti"))
 	case "nuovi casi nazione":
-		curPath, _ := os.Getwd()
-		dirPath := curPath + imageFolder
+		dirPath := workingDirectory + imageFolder
 		title := "Nuovi Positivi"
 		var filename string
 		var err error
@@ -567,8 +576,7 @@ func (app *application) callbackHandler(cq *tbot.CallbackQuery) {
 			return
 		}
 
-		curPath, _ := os.Getwd()
-		dirPath := curPath + imageFolder
+		dirPath := workingDirectory + imageFolder
 		title := "Nuovi positivi regione " + regionsData[regionId].Denominazione_regione
 		var filename string
 
@@ -601,7 +609,7 @@ func (app *application) callbackHandler(cq *tbot.CallbackQuery) {
 		app.lastRegion = ""
 		app.lastProvince = ""
 		break
-	case "zonesButtons":
+	case "zonesbuttons":
 		buttons, err := app.zonesButtons()
 		if err != nil {
 			log.Println(err)
@@ -925,8 +933,7 @@ func (app *application) sendAndamentoRegionale(m *tbot.Message, regionIndex int)
 		return
 	}
 
-	curPath, _ := os.Getwd()
-	dirPath := curPath + imageFolder
+	dirPath := workingDirectory + imageFolder
 	title := "Dati regione" + regionsData[firstRegionIndex].Denominazione_regione
 	var filename string
 
@@ -1008,8 +1015,7 @@ func (app *application) sendAndamentoProvinciale(cq *tbot.CallbackQuery, provinc
 		return
 	}
 
-	curPath, _ := os.Getwd()
-	dirPath := curPath + imageFolder
+	dirPath := workingDirectory + imageFolder
 	title := "Totale Contagi " + provincesData[firstProvinceIndex].Denominazione_provincia
 	var filename string
 
@@ -1580,8 +1586,7 @@ func (app *application) sendConfrontoDatiRegione(cq *tbot.CallbackQuery) {
 		}
 	}
 
-	curPath, _ := os.Getwd()
-	dirPath := curPath + imageFolder
+	dirPath := workingDirectory + imageFolder
 	titleForFilename := "Regione" + regionsData[regionId].Denominazione_regione + fmt.Sprintf("%s_%s_%s", titleAttributes[0], titleAttributes[1], titleAttributes[2])
 	var filename string
 	title := "Confronto dati regione " + regionsData[regionId].Denominazione_regione
@@ -2035,8 +2040,7 @@ func (app *application) sendConfrontoDatiNazione(cq *tbot.CallbackQuery) {
 		}
 	}
 
-	curPath, _ := os.Getwd()
-	dirPath := curPath + imageFolder
+	dirPath := workingDirectory + imageFolder
 	titleForFilename := "Nazione" + fmt.Sprintf("%s_%s_%s", titleAttributes[0], titleAttributes[1], titleAttributes[2])
 	var filename string
 	var err error
@@ -2178,8 +2182,7 @@ func writeOperation(cq *tbot.CallbackQuery) {
 		return
 	}
 
-	curPath, _ := os.Getwd()
-	dirPath := curPath + logsFolder
+	dirPath := workingDirectory + logsFolder
 	filename := dirPath + cq.Message.Chat.Username + ".txt"
 	if cq.Message.Chat.Username == "" {
 		filename = dirPath + cq.Message.Chat.FirstName + "_" + cq.Message.Chat.LastName + ".txt"
