@@ -52,9 +52,9 @@ var mutex = &sync.Mutex{} // Mutex used when updating data from the pcm-dpc repo
 func initFolders() {
 	currentPath, _ := os.Getwd()
 	workingDirectory = currentPath + botDataDirectory
-	os.MkdirAll(workingDirectory, 0655)
-	os.MkdirAll(workingDirectory+imageFolder, 0655)
-	os.MkdirAll(workingDirectory+logsFolder, 0655)
+	os.MkdirAll(workingDirectory, 0755)
+	os.MkdirAll(workingDirectory+imageFolder, 0755)
+	os.MkdirAll(workingDirectory+logsFolder, 0755)
 }
 
 func main() {
