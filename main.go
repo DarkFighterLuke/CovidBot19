@@ -70,8 +70,8 @@ func main() {
 	cronjob.AddFunc("TZ=Europe/Rome 05 18 * * *", updateData(&nationData, &regionsData, &provincesData, &datiNote))
 	cronjob.Start()
 
-	// Creating bot instance using long polling mode
-	bot := tbot.New(os.Getenv("CovidBot"))
+	// Creating bot instance using webhook mode
+	bot := tbot.New(os.Getenv("CovidBot"), tbot.WithWebhook("https://covid19bot.tk/bot", ":443"))
 
 	app := &application{}
 	app.client = bot.Client()

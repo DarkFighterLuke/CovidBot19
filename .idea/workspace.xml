@@ -19,7 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c55a33a7-fbcd-4eb1-9cf8-e2a8d011c763" name="Default Changelist" comment="Removed old useless debug code pieces&#10;Added comments to the application struct">
+    <list default="true" id="c55a33a7-fbcd-4eb1-9cf8-e2a8d011c763" name="Default Changelist" comment="Fixed zonesButtons callback&#10;Added creation of bot data folders at startup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
@@ -49,7 +49,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="D:/Programmi/Go" />
+  <component name="GOROOT" path="/usr/local/go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -86,7 +86,7 @@
       <method v="2" />
     </configuration>
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="c55a33a7-fbcd-4eb1-9cf8-e2a8d011c763" name="Default Changelist" comment="" />
@@ -98,32 +98,33 @@
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Removed some useless log messages" />
     <MESSAGE value="Added some comments&#10;Renamed zone() function to zonesButtons()" />
     <MESSAGE value="Removed old useless debug code pieces&#10;Added comments to the application struct" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed old useless debug code pieces&#10;Added comments to the application struct" />
+    <MESSAGE value="Fixed zonesButtons callback&#10;Added creation of bot data folders at startup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed zonesButtons callback&#10;Added creation of bot data folders at startup" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="552" y="178" key="#GOROOT" timestamp="1599670248916">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="552" y="179" key="#GOROOT" timestamp="1599675294887">
+      <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="552" y="178" key="#GOROOT/0.0.1920.1040@0.0.1920.1040" timestamp="1599670248916" />
+    <state x="552" y="179" key="#GOROOT/0.0.1920.1044@0.0.1920.1044" timestamp="1599675294887" />
     <state x="418" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1599466984430">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
@@ -132,38 +133,38 @@
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="790" y="251" key="EnvironmentVariablesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1599466982141" />
-    <state width="1866" height="267" key="GridCell.Tab.0.bottom" timestamp="1599650853044">
+    <state width="1866" height="266" key="GridCell.Tab.0.bottom" timestamp="1599850409375">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1595949490475" />
-    <state width="1866" height="267" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1599650853044" />
-    <state width="1866" height="267" key="GridCell.Tab.0.center" timestamp="1599650853044">
+    <state width="1866" height="266" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1599850409375" />
+    <state width="1866" height="266" key="GridCell.Tab.0.center" timestamp="1599850409374">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1595949490475" />
-    <state width="1866" height="267" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1599650853044" />
-    <state width="1866" height="267" key="GridCell.Tab.0.left" timestamp="1599650853044">
+    <state width="1866" height="266" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1599850409374" />
+    <state width="1866" height="266" key="GridCell.Tab.0.left" timestamp="1599850409374">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1595949490475" />
-    <state width="1866" height="267" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1599650853044" />
-    <state width="1866" height="267" key="GridCell.Tab.0.right" timestamp="1599650853044">
+    <state width="1866" height="266" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1599850409374" />
+    <state width="1866" height="266" key="GridCell.Tab.0.right" timestamp="1599850409375">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1595949490475" />
-    <state width="1866" height="267" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1599650853044" />
+    <state width="1866" height="266" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1599850409375" />
     <state x="752" y="146" key="RollbackChangesDialog" timestamp="1599655174581">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="752" y="146" key="RollbackChangesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1599655174581" />
-    <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2" timestamp="1599599639228">
+    <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2" timestamp="1599657171220">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1599599639228" />
-    <state x="722" y="428" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1599599748950">
+    <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1599657171220" />
+    <state x="722" y="428" width="475" height="187" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1599762407355">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="722" y="428" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1044@0.0.1920.1044" timestamp="1599599748950" />
+    <state x="722" y="428" width="475" height="187" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1044@0.0.1920.1044" timestamp="1599762407355" />
     <state x="704" y="325" width="501" height="400" key="git4idea.ui.GitUnstashDialog" timestamp="1599653540318">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
