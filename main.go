@@ -71,7 +71,8 @@ func main() {
 	cronjob.Start()
 
 	// Creating bot instance using webhook mode
-	bot := tbot.New(os.Getenv("CovidBot"), tbot.WithWebhook("https://covid19bot.tk/bot", ":443"))
+	bot := tbot.New(os.Getenv("CovidBot"))
+	//bot := tbot.New(os.Getenv("CovidBot"), tbot.WithWebhook("https://covid19bot.tk/bot", ":443"))
 
 	app := &application{}
 	app.client = bot.Client()
@@ -477,7 +478,6 @@ func updateData(nazione *[]covidgraphs.NationData, regioni *[]covidgraphs.Region
 
 // Sends national trend plot and text with related buttons
 func (app *application) sendAndamentoNazionale(m *tbot.Message) {
-
 	dirPath := workingDirectory + imageFolder
 	title := "Andamento nazionale"
 	var filename string
@@ -485,7 +485,11 @@ func (app *application) sendAndamentoNazionale(m *tbot.Message) {
 
 	filename = dirPath + covidgraphs.FilenameCreator(title)
 	if !covidgraphs.IsGraphExisting(filename) {
-		err, filename = covidgraphs.AndamentoNazionaleCompleto(&nationData, title, filename)
+		fields := make([]string, 3)
+		fields[0] = "attualmente_positivi"
+		fields[1] = "dimessi_guariti"
+		fields[2] = "deceduti"
+		err, filename = covidgraphs.VociNazione(&nationData, fields, 0, title, filename)
 
 		if err != nil {
 			log.Println(err)
@@ -500,7 +504,7 @@ func (app *application) sendAndamentoNazionale(m *tbot.Message) {
 // Returns the caption for the national trend plot image
 func setCaptionAndamentoNazionale() string {
 	lastIndex := len(nationData) - 1
-	_, nuoviTotale := covidgraphs.CalculateDelta(nationData[lastIndex-1].Totale_casi, nationData[lastIndex].Totale_casi)
+	_, nuoviTotale := covidgraphs.CalculateDelta(nationData[lastIndex-1].Totale_positivi, nationData[lastIndex].Totale_positivi)
 	_, nuoviGuariti := covidgraphs.CalculateDelta(nationData[lastIndex-1].Dimessi_guariti, nationData[lastIndex].Dimessi_guariti)
 	_, nuoviMorti := covidgraphs.CalculateDelta(nationData[lastIndex-1].Deceduti, nationData[lastIndex].Deceduti)
 	_, nuoviPositivi := covidgraphs.CalculateDelta(nationData[lastIndex-1].Nuovi_positivi, nationData[lastIndex].Nuovi_positivi)
@@ -510,7 +514,7 @@ func setCaptionAndamentoNazionale() string {
 	}
 
 	msg := "<b>Andamento nazionale " + data.Format("2006-01-02") + "</b>\n\n" +
-		"\n<b>Totale positivi: </b>" + strconv.Itoa(nationData[lastIndex].Totale_casi) + " (<i>" + nuoviTotale + "</i>)" +
+		"\n<b>Attualmente positivi: </b>" + strconv.Itoa(nationData[lastIndex].Totale_positivi) + " (<i>" + nuoviTotale + "</i>)" +
 		"\n<b>Guariti: </b>" + strconv.Itoa(nationData[lastIndex].Dimessi_guariti) + " (<i>" + nuoviGuariti + "</i>)" +
 		"\n<b>Morti: </b>" + strconv.Itoa(nationData[lastIndex].Deceduti) + " (<i>" + nuoviMorti + "</i>)" +
 		"\n\n<b>Nuovi positivi: </b>" + strconv.Itoa(nationData[lastIndex].Nuovi_positivi) + " (<i>" + nuoviPositivi + "</i>)"
