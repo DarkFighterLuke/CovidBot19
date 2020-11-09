@@ -19,10 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c55a33a7-fbcd-4eb1-9cf8-e2a8d011c763" name="Default Changelist" comment="Removed old useless debug code pieces&#10;Added comments to the application struct">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-    </list>
+    <list default="true" id="c55a33a7-fbcd-4eb1-9cf8-e2a8d011c763" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -60,7 +57,6 @@
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultGoTemplateProperty" value="Go Application" />
-    <property name="GO_FMT" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
@@ -95,6 +91,14 @@
       <option name="presentableId" value="Default" />
       <updated>1585748893554</updated>
     </task>
+    <task id="LOCAL-00001" summary="Changed Totale_casi with Attualmente_positivi in Andamento Nazionale">
+      <created>1604873735117</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1604873735117</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -116,7 +120,8 @@
     <MESSAGE value="Removed some useless log messages" />
     <MESSAGE value="Added some comments&#10;Renamed zone() function to zonesButtons()" />
     <MESSAGE value="Removed old useless debug code pieces&#10;Added comments to the application struct" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed old useless debug code pieces&#10;Added comments to the application struct" />
+    <MESSAGE value="Changed Totale_casi with Attualmente_positivi in Andamento Nazionale" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed Totale_casi with Attualmente_positivi in Andamento Nazionale" />
   </component>
   <component name="WindowStateProjectService">
     <state x="552" y="178" key="#GOROOT" timestamp="1599670248916">
@@ -127,6 +132,10 @@
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="418" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1599466984430" />
+    <state x="585" y="78" key="CommitChangelistDialog2" timestamp="1604873734123">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="585" y="78" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1604873734123" />
     <state x="790" y="251" key="EnvironmentVariablesDialog" timestamp="1599466982141">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
@@ -135,34 +144,35 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1603104637924" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1604873438680">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1604873750309">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1604873438680" />
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1604873750309" />
     <state width="1866" height="267" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1599650853044" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1604873438680">
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1604873750309">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1604873438680" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1604873750309" />
     <state width="1866" height="267" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1599650853044" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1604873438680">
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1604873750309">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1604873438680" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1604873750309" />
     <state width="1866" height="267" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1599650853044" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1604873438680">
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1604873750309">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1604873438680" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1604873750309" />
     <state width="1866" height="267" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1599650853044" />
     <state x="752" y="145" key="RollbackChangesDialog" timestamp="1604008897417">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="752" y="145" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604008897417" />
     <state x="752" y="146" key="RollbackChangesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1599655174581" />
-    <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2" timestamp="1599599639228">
-      <screen x="0" y="0" width="1920" height="1044" />
+    <state x="555" y="255" width="800" height="538" key="Vcs.Push.Dialog.v2" timestamp="1604873740984">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="555" y="255" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604873740984" />
     <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1599599639228" />
     <state x="722" y="428" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1599599748950">
       <screen x="0" y="0" width="1920" height="1044" />
