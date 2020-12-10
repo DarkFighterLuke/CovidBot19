@@ -20,7 +20,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c55a33a7-fbcd-4eb1-9cf8-e2a8d011c763" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,7 +107,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604958721835</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Adapted calls for the new version of the covidgraphs library">
+      <created>1607623705026</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1607623705026</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -141,7 +147,8 @@
     <MESSAGE value="Added some comments&#10;Renamed zone() function to zonesButtons()" />
     <MESSAGE value="Removed old useless debug code pieces&#10;Added comments to the application struct" />
     <MESSAGE value="Changed Totale_casi with Attualmente_positivi in Andamento Nazionale" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed Totale_casi with Attualmente_positivi in Andamento Nazionale" />
+    <MESSAGE value="Adapted calls for the new version of the covidgraphs library" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adapted calls for the new version of the covidgraphs library" />
   </component>
   <component name="WindowStateProjectService">
     <state x="552" y="178" key="#GOROOT" timestamp="1599670248916">
@@ -153,10 +160,10 @@
     </state>
     <state x="418" y="179" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605217339322" />
     <state x="418" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1599466984430" />
-    <state x="585" y="78" key="CommitChangelistDialog2" timestamp="1604958720953">
+    <state x="585" y="78" key="CommitChangelistDialog2" timestamp="1607623704098">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="585" y="78" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1604958720953" />
+    <state x="585" y="78" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1607623704098" />
     <state x="790" y="251" key="EnvironmentVariablesDialog" timestamp="1599466982141">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
@@ -190,10 +197,10 @@
     </state>
     <state x="752" y="145" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605218956130" />
     <state x="752" y="146" key="RollbackChangesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1599655174581" />
-    <state x="555" y="255" width="800" height="538" key="Vcs.Push.Dialog.v2" timestamp="1604958737381">
+    <state x="555" y="255" width="800" height="538" key="Vcs.Push.Dialog.v2" timestamp="1607623708152">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="555" y="255" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604958737381" />
+    <state x="555" y="255" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607623708152" />
     <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1599599639228" />
     <state x="722" y="426" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605217239166">
       <screen x="0" y="0" width="1920" height="1040" />
