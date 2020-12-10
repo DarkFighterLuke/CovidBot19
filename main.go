@@ -2,11 +2,13 @@ package main
 
 import (
 	"covidgraphs"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"github.com/robfig/cron"
 	"github.com/yanzay/tbot"
 	"log"
+	"net/http"
 	"os"
 	"sort"
 	"strconv"
@@ -59,6 +61,7 @@ func initFolders() {
 
 func main() {
 	log.SetOutput(os.Stdout)
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	initFolders()
 	updateData(&nationData, &regionsData, &provincesData, &datiNote)()
 
@@ -71,8 +74,8 @@ func main() {
 	cronjob.Start()
 
 	// Creating bot instance using webhook mode
-	//bot := tbot.New(os.Getenv("CovidBot"))
-	bot := tbot.New(os.Getenv("CovidBot"), tbot.WithWebhook("https://covid19bot.tk/bot", ":443"))
+	bot := tbot.New(os.Getenv("CovidBot"))
+	//bot := tbot.New(os.Getenv("CovidBot"), tbot.WithWebhook("https://covid19bot.tk/bot", ":443"))
 
 	app := &application{}
 	app.client = bot.Client()
@@ -375,7 +378,8 @@ func (app *application) textProvince(m *tbot.Message) {
 
 		filename = dirPath + covidgraphs.FilenameCreator(title)
 		if !covidgraphs.IsGraphExisting(filename) {
-			err, filename = covidgraphs.TotalePositiviProvincia(&provincesData, 0, provinceId, title, filename)
+			provinceIndexes := covidgraphs.GetProvinceIndexesByName(&provincesData, tokens[0])
+			err, filename = covidgraphs.TotalePositiviProvincia(&provincesData, provinceIndexes, title, filename)
 
 			if err != nil {
 				log.Println(err)
@@ -410,7 +414,8 @@ func (app *application) textProvince(m *tbot.Message) {
 
 		filename = dirPath + covidgraphs.FilenameCreator(title)
 		if !covidgraphs.IsGraphExisting(filename) {
-			err, filename = covidgraphs.NuoviPositiviProvincia(&provincesData, tokens[0], true, title, filename)
+			provinceIndexes := covidgraphs.GetProvinceIndexesByName(&provincesData, tokens[0])
+			err, filename = covidgraphs.NuoviPositiviProvincia(&provincesData, provinceIndexes, true, title, filename)
 
 			if err != nil {
 				log.Println(err)
@@ -1014,18 +1019,15 @@ func (app *application) caseProvince(cq *tbot.CallbackQuery) {
 
 // Sends a province trend plot and text with related buttons
 func (app *application) sendAndamentoProvinciale(cq *tbot.CallbackQuery, provinceIndex int) {
-	firstProvinceIndex, err := covidgraphs.FindFirstOccurrenceProvince(&provincesData, "denominazione_provincia", provincesData[provinceIndex].Denominazione_provincia)
-	if err != nil {
-		return
-	}
-
 	dirPath := workingDirectory + imageFolder
-	title := "Totale Contagi " + provincesData[firstProvinceIndex].Denominazione_provincia
+	title := "Totale Contagi " + provincesData[provinceIndex].Denominazione_provincia
 	var filename string
+	var err error
 
 	filename = dirPath + covidgraphs.FilenameCreator(title)
 	if !covidgraphs.IsGraphExisting(filename) {
-		err, filename = covidgraphs.TotalePositiviProvincia(&provincesData, 0, firstProvinceIndex, title, filename)
+		provinceIndexes := covidgraphs.GetProvinceIndexesByName(&provincesData, provincesData[provinceIndex].Denominazione_provincia)
+		err, filename = covidgraphs.TotalePositiviProvincia(&provincesData, provinceIndexes, title, filename)
 
 		if err != nil {
 			app.client.SendMessage(cq.Message.Chat.ID, "Impossibile reperire il grafico al momento.\nRiprova più tardi.")
@@ -1050,8 +1052,11 @@ func (app *application) sendAndamentoProvinciale(cq *tbot.CallbackQuery, provinc
 
 // Returns the caption for a provincial trend plot image
 func setCaptionProvince(provinceId int) string {
-	_, nuoviTotale := covidgraphs.CalculateDelta(provincesData[provinceId-covidgraphs.ProvinceOffset].Totale_casi, provincesData[provinceId].Totale_casi)
-	_, nuoviPositivi := covidgraphs.CalculateDelta(provincesData[provinceId-covidgraphs.ProvinceOffset].NuoviCasi, provincesData[provinceId].NuoviCasi)
+	provinceIndexes := covidgraphs.GetProvinceIndexesByName(&provincesData, provincesData[provinceId].Denominazione_provincia)
+	todayIndex := (*provinceIndexes)[len(*provinceIndexes)-1]
+	yesterdayIndex := (*provinceIndexes)[len(*provinceIndexes)-2]
+	_, nuoviTotale := covidgraphs.CalculateDelta(provincesData[yesterdayIndex].Totale_casi, provincesData[todayIndex].Totale_casi)
+	_, nuoviPositivi := covidgraphs.CalculateDelta(provincesData[yesterdayIndex].NuoviCasi, provincesData[todayIndex].NuoviCasi)
 	data, err := time.Parse("2006-01-02T15:04:05", provincesData[provinceId].Data)
 	if err != nil {
 		log.Println("error parsing data in setCaptionAndamentoNazionale()")
@@ -2156,8 +2161,11 @@ func (app *application) isStringFoundInNationChoices(str string) bool {
 
 // Returns a caption with the selected province fields data
 func setCaptionConfrontoProvincia(provinceId int, fieldsNames []string) string {
-	_, nuoviTotale := covidgraphs.CalculateDelta(provincesData[provinceId-covidgraphs.ProvinceOffset].Totale_casi, provincesData[provinceId].Totale_casi)
-	_, nuoviPositivi := covidgraphs.CalculateDelta(provincesData[provinceId-covidgraphs.ProvinceOffset].NuoviCasi, provincesData[provinceId].NuoviCasi)
+	provinceIndexes := covidgraphs.GetProvinceIndexesByName(&provincesData, provincesData[provinceId].Denominazione_provincia)
+	todayIndex := (*provinceIndexes)[len(*provinceIndexes)-1]
+	yesterdayIndex := (*provinceIndexes)[len(*provinceIndexes)-2]
+	_, nuoviTotale := covidgraphs.CalculateDelta(provincesData[yesterdayIndex].Totale_casi, provincesData[todayIndex].Totale_casi)
+	_, nuoviPositivi := covidgraphs.CalculateDelta(provincesData[yesterdayIndex].NuoviCasi, provincesData[todayIndex].NuoviCasi)
 	data, err := time.Parse("2006-01-02T15:04:05", provincesData[provinceId].Data)
 	if err != nil {
 		log.Println("error parsing data for province caption")
