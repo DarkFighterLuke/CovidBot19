@@ -448,7 +448,7 @@ func updateData(nazione *[]covidgraphs.NationData, regioni *[]covidgraphs.Region
 	return func() {
 		mutex.Lock()
 
-		covidgraphs.DeleteAllPlots(imageFolder)
+		covidgraphs.DeleteAllPlots(workingDirectory + imageFolder)
 
 		ptrNazione, err := covidgraphs.GetNation()
 		if err != nil {

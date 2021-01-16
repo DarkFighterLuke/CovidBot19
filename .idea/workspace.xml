@@ -150,23 +150,14 @@
     <option name="LAST_COMMIT_MESSAGE" value="Adapted calls for the new version of the covidgraphs library" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="552" y="178" key="#GOROOT" timestamp="1599670248916">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="552" y="178" key="#GOROOT/0.0.1920.1040@0.0.1920.1040" timestamp="1599670248916" />
     <state x="418" y="179" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1605217339322">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="418" y="179" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605217339322" />
-    <state x="418" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1599466984430" />
-    <state x="585" y="78" key="CommitChangelistDialog2" timestamp="1607623704098">
+    <state x="585" y="78" key="CommitChangelistDialog2" timestamp="1610815616249">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="585" y="78" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1607623704098" />
-    <state x="790" y="251" key="EnvironmentVariablesDialog" timestamp="1599466982141">
-      <screen x="0" y="0" width="1920" height="1044" />
-    </state>
-    <state x="790" y="251" key="EnvironmentVariablesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1599466982141" />
+    <state x="585" y="78" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1610815616249" />
     <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1607367090456">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -175,45 +166,33 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1607555523038" />
-    <state width="1866" height="267" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1599650853044" />
     <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1607555523037">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1607555523037" />
-    <state width="1866" height="267" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1599650853044" />
     <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1607555523037">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1607555523037" />
-    <state width="1866" height="267" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1599650853044" />
     <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1607555523037">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1607555523037" />
-    <state width="1866" height="267" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1599650853044" />
     <state x="752" y="145" key="RollbackChangesDialog" timestamp="1605218956130">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="752" y="145" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605218956130" />
-    <state x="752" y="146" key="RollbackChangesDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1599655174581" />
-    <state x="555" y="255" width="800" height="538" key="Vcs.Push.Dialog.v2" timestamp="1607623708152">
+    <state x="555" y="255" width="800" height="538" key="Vcs.Push.Dialog.v2" timestamp="1610815622172">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="555" y="255" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1607623708152" />
-    <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1599599639228" />
-    <state x="722" y="426" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605217239166">
+    <state x="555" y="255" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610815622172" />
+    <state x="722" y="426" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1610815571923">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="722" y="426" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605217239166" />
-    <state x="722" y="428" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1044@0.0.1920.1044" timestamp="1599599748950" />
-    <state x="704" y="325" width="501" height="400" key="git4idea.ui.GitUnstashDialog" timestamp="1599653540318">
-      <screen x="0" y="0" width="1920" height="1044" />
-    </state>
-    <state x="704" y="325" width="501" height="400" key="git4idea.ui.GitUnstashDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1599653540318" />
+    <state x="722" y="426" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1610815571923" />
     <state x="623" y="225" width="672" height="679" key="search.everywhere.popup" timestamp="1607552034517">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="623" y="225" width="672" height="679" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607552034517" />
-    <state x="623" y="226" width="672" height="681" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1599598440863" />
   </component>
 </project>
