@@ -2,13 +2,11 @@ package main
 
 import (
 	"covidgraphs"
-	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"github.com/robfig/cron"
 	"github.com/yanzay/tbot"
 	"log"
-	"net/http"
 	"os"
 	"sort"
 	"strconv"
@@ -19,7 +17,7 @@ import (
 
 const (
 	nTopRegions      = 10
-	botDataDirectory = "/CovidBot/"
+	botDataDirectory = "/CovidBot"
 	imageFolder      = "/plots/"
 	logsFolder       = "/logs/"
 )
@@ -61,7 +59,7 @@ func initFolders() {
 
 func main() {
 	log.SetOutput(os.Stdout)
-	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	//http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	initFolders()
 	updateData(&nationData, &regionsData, &provincesData, &datiNote)()
 
@@ -74,8 +72,7 @@ func main() {
 	cronjob.Start()
 
 	// Creating bot instance using webhook mode
-	//bot := tbot.New(os.Getenv("CovidBot"))
-	bot := tbot.New(os.Getenv("CovidBot"), tbot.WithWebhook("https://covid19bot.tk/bot", ":443"))
+	bot := tbot.New(os.Getenv("CovidBot"), tbot.WithWebhook("https://hiddenfile.tk/bot", "127.0.0.1:40987"))
 
 	app := &application{}
 	app.client = bot.Client()
@@ -2241,7 +2238,7 @@ func (app *application) getSortedChoicesConfrontoRegione() []string {
 // Sorts national fields selected for comparison
 func (app *application) getSortedChoicesConfrontoNazione() []string {
 	tempChoices := make([]string, len(app.choicesConfrontoNazione))
-	copy(tempChoices, app.choicesConfrontoRegione)
+	copy(tempChoices, app.choicesConfrontoNazione)
 	sort.Strings(tempChoices)
 
 	return tempChoices
