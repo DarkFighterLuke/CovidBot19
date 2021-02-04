@@ -20,6 +20,7 @@ const (
 	botDataDirectory = "/CovidBot"
 	imageFolder      = "/plots/"
 	logsFolder       = "/logs/"
+	botUsername      = "@covidata19bot"
 )
 
 var workingDirectory string
@@ -46,6 +47,33 @@ var natregAttributes = []string{"ricoverati_con_sintomi", "terapia_intensiva", "
 	"totale_casi", "tamponi"} // National and regional fields names
 
 var reports = []string{"generale"} // Types of reports avvailable
+
+var helpMsg = fmt.Sprintf(`/nazione <code>andamento</code>
+per ottenere l'andamento della nazione
+/nazione <code>nome_dei_campi</code>
+per ottenere un confronto tra campi a tua scelta
+
+/regione <code>nome_regione andamento</code>
+per ottenere l'andamento della regione scelta
+/regione <code>nome_regione nome_dei_campi</code>
+per ottenere un confronto tra campi a tua scelta sulla desiderata
+
+/provincia <code>nome_provincia totale_casi</code>
+per ottenere informazioni sul totale dei casi della provincia scelta
+/provincia <code>nome_provincia nuovi_positivi</code>
+per ottenere informazioni sui nuovi positivi della provincia scelta
+
+/reports <code>[file] nome_report</code>
+
+
+Dati nazione disponibili:
+{<code>%s</code>}
+
+Dati regione disponibili:
+{<code>%s</code>}
+
+Report disponibili:{<code>%s</code>}`, strings.Join(natregAttributes, ","),
+	strings.Join(natregAttributes, ","), strings.Join(reports, ","))
 
 var mutex = &sync.Mutex{} // Mutex used when updating data from the pcm-dpc repo
 
@@ -89,19 +117,21 @@ func main() {
 func (b *bot) Update(update *echotron.Update) {
 	if update.CallbackQuery == nil {
 		keywords := strings.Split(update.Message.Text, " ")
-		if keywords[0] == "/start" {
+		if keywords[0] == "/start" || keywords[0] == "/start"+botUsername {
 			b.sendStart(update)
-		} else if keywords[0] == "/home" {
+		} else if keywords[0] == "/help" || keywords[0] == "/help"+botUsername {
+			b.sendHelp(update)
+		} else if keywords[0] == "/home" || keywords[0] == "/home"+botUsername {
 			b.home(update)
-		} else if keywords[0] == "/nazione" {
+		} else if keywords[0] == "/nazione" || keywords[0] == "/nazione"+botUsername {
 			b.textNation(update)
-		} else if keywords[0] == "/regione" {
+		} else if keywords[0] == "/regione" || keywords[0] == "/regione"+botUsername {
 			b.textRegion(update)
-		} else if keywords[0] == "/provincia" {
+		} else if keywords[0] == "/provincia" || keywords[0] == "/provincia"+botUsername {
 			b.textProvince(update)
-		} else if keywords[0] == "/reports" {
+		} else if keywords[0] == "/reports" || keywords[0] == "/reports"+botUsername {
 			b.textReport(update)
-		} else if keywords[0] == "/credits" {
+		} else if keywords[0] == "/credits" || keywords[0] == "/credits"+botUsername {
 			b.credits(update.Message.Chat.ID)
 		}
 
@@ -423,39 +453,25 @@ Puoi seguire i pulsanti per ottenere comodamente le informazioni che desideri
 
 <b><i>oppure</i></b>
 Se ti piace digitare puoi usare i seguenti comandi:
-/nazione <code>andamento</code>
-per ottenere l'andamento della nazione
-/nazione <code>nome_dei_campi</code>
-per ottenere un confronto tra campi a tua scelta
-
-/regione <code>nome_regione andamento</code>
-per ottenere l'andamento della regione scelta
-/regione <code>nome_regione nome_dei_campi</code>
-per ottenere un confronto tra campi a tua scelta sulla desiderata
-
-/provincia <code>nome_provincia totale_casi</code>
-per ottenere informazioni sul totale dei casi della provincia scelta
-/provincia <code>nome_provincia nuovi_positivi</code>
-per ottenere informazioni sui nuovi positivi della provincia scelta
-
-/reports <code>[file] nome_report</code>
-
-
-Dati nazione disponibili:
-{<code>%s</code>}
-
-Dati regione disponibili:
-{<code>%s</code>}
-
-Report disponibili:\n{<code>%s</code>}
+%s
 
 Questi comandi possono sempre tornarti utili! Prova ad <b>aggiungere il bot in un gruppo</b> per tenere informate le tue cerchia.
 
 Cominciamo!`
 
 		b.SendMessageWithKeyboard(fmt.Sprintf(messageText, update.Message.User.FirstName, strings.Join(natregAttributes, ","),
-			strings.Join(natregAttributes, ","), strings.Join(reports, ",")), update.Message.Chat.ID, buttons, echotron.PARSE_HTML)
+			strings.Join(natregAttributes, ","), strings.Join(reports, ","), helpMsg), update.Message.Chat.ID, buttons, echotron.PARSE_HTML)
+	} else {
+		msg := `
+Questo comando non è disponibile nei gruppi.
+Digita /help per scoprire i comandi disponibili.
+`
+		b.SendMessage(msg, update.Message.Chat.ID, echotron.PARSE_HTML)
 	}
+}
+
+func (b *bot) sendHelp(update *echotron.Update) {
+	b.SendMessage(helpMsg, update.Message.Chat.ID, echotron.PARSE_HTML)
 }
 
 // Handles "home" command
@@ -473,15 +489,15 @@ func (b *bot) home(update *echotron.Update) {
 
 // Handles "report" textual command
 func (b *bot) textReport(update *echotron.Update) {
+	usageMessage := "<b>Uso Corretto del Comando:\n" +
+		"/reports <code>[file] nome_report</code>\nDigita /help per visualizzare il manuale."
+
 	message := strings.Replace(update.Message.Text, "/reports ", "", 1)
 	var fieldNames []string
 	var flagFile bool = false
 	tokens := strings.Split(message, " ")
 	if len(tokens) < 1 {
-		if update.Message.Chat.Type == "private" {
-			b.SendMessage("<b>Uso Corretto del Comando:\n"+
-				"/reports <code>[file] nome_report</code>\nDigita /start per visualizzare il manuale.", update.Message.Chat.ID, echotron.PARSE_HTML)
-		}
+		b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 		return
 	}
 	for i, _ := range tokens {
@@ -499,9 +515,7 @@ func (b *bot) textReport(update *echotron.Update) {
 		if res := sort.SearchStrings(reports, tokens[i]); res < len(reports) {
 			fieldNames = append(fieldNames, tokens[i])
 		} else {
-			if update.Message.Chat.Type == "private" {
-				b.SendMessage("<b>Uso Corretto del Comando:</b>\n/reports <code>[file] nome_report</code>", update.Message.Chat.ID, echotron.PARSE_HTML)
-			}
+			b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 			return
 		}
 	}
@@ -538,14 +552,16 @@ func (b *bot) textReport(update *echotron.Update) {
 
 // Handles "nazione" textual command
 func (b *bot) textNation(update *echotron.Update) {
-	message := strings.Replace(update.Message.Text, "/nazione ", "", 1)
+	usageMessage := "<b>Uso Corretto del Comando:\n</b>/nazione <code>andamento</code>\nper ottenere l'andamento della nazione\n" +
+		"/nazione <code>nome_dei_campi</code>\nper ottenere un confronto tra campi a tua scelta\nDigita /help per visualizzare il manuale."
+
+	tokens := strings.Fields(update.Message.Text)
+	tokens = tokens[1:]
+
 	var fieldNames []string
-	tokens := strings.Split(message, " ")
+
 	if len(tokens) < 1 {
-		if update.Message.Chat.Type == "private" {
-			b.SendMessage("<b>Uso Corretto del Comando:\n</b>/nazione <code>andamento</code>\nper ottenere l'andamento della nazione\n"+
-				"/nazione <code>nome_dei_campi</code>\nper ottenere un confronto tra campi a tua scelta\nDigita /start per visualizzare il manuale.", update.Message.Chat.ID, echotron.PARSE_HTML)
-		}
+		b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 		return
 	}
 
@@ -557,6 +573,7 @@ func (b *bot) textNation(update *echotron.Update) {
 			if res := sort.SearchStrings(natregAttributes, tokens[i]); res < len(natregAttributes) {
 				fieldNames = append(fieldNames, tokens[i])
 			} else {
+				b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 				return
 			}
 		}
@@ -587,10 +604,7 @@ func (b *bot) textNation(update *echotron.Update) {
 
 		if err != nil {
 			log.Println(err)
-			if update.Message.Chat.Type == "private" {
-				b.SendMessage("<b>Uso Corretto del Comando:\n</b>/nazione <code>andamento</code>\nper ottenere l'andamento della nazione\n"+
-					"/nazione <code>nome_dei_campi</code>\nper ottenere un confronto tra campi a tua scelta\nDigita /start per visualizzare il manuale.", update.Message.Chat.ID, echotron.PARSE_HTML)
-			}
+			b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 			return
 		}
 
@@ -602,16 +616,15 @@ func (b *bot) textNation(update *echotron.Update) {
 // Handles "regione" textual command
 func (b *bot) textRegion(update *echotron.Update) {
 	dirPath := workingDirectory + imageFolder
+	usageMessage := "<b>Uso Corretto del Comando:\n</b>/regione <code>nome_regione andamento</code>\nper ottenere l'andamento della regione scelta\n" +
+		"/regione <code>nome_regione nome_dei_campi</code>\nper ottenere un confronto tra campi a tua scelta sulla desiderata\nDigita /help per visualizzare il manuale."
 
 	message := strings.Replace(update.Message.Text, "/regione ", "", 1)
 	var fieldNames []string
 	tokens := strings.Split(message, " ")
 
 	if len(tokens) < 2 {
-		if update.Message.Chat.Type == "private" {
-			b.SendMessage("<b>Uso Corretto del Comando:\n</b>/regione <code>nome_regione andamento</code>\nper ottenere l'andamento della regione scelta\n"+
-				"/regione <code>nome_regione nome_dei_campi</code>\nper ottenere un confronto tra campi a tua scelta sulla desiderata\nDigita /start per visualizzare il manuale.", update.Message.Chat.ID, echotron.PARSE_HTML)
-		}
+		b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 		return
 	}
 	sort.Strings(natregAttributes)
@@ -636,10 +649,7 @@ func (b *bot) textRegion(update *echotron.Update) {
 		regionCode, err := covidgraphs.FindFirstOccurrenceRegion(&regionsData, "denominazione_regione", tokens[0])
 		if err != nil {
 			log.Println(err)
-			if update.Message.Chat.Type == "private" {
-				b.SendMessage("<b>Uso Corretto del Comando:\n</b>/regione <code>nome_regione andamento</code>\nper ottenere l'andamento della regione scelta\n"+
-					"/regione <code>nome_regione nome_dei_campi</code>\nper ottenere un confronto tra campi a tua scelta sulla desiderata\nDigita /start per visualizzare il manuale.", update.Message.Chat.ID, echotron.PARSE_HTML)
-			}
+			b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 			return
 		}
 
@@ -667,10 +677,7 @@ func (b *bot) textRegion(update *echotron.Update) {
 
 		if err != nil {
 			log.Println(err)
-			if update.Message.Chat.Type == "private" {
-				b.SendMessage("<b>Uso Corretto del Comando:\n</b>/regione <code>nome_regione andamento</code>\nper ottenere l'andamento della regione scelta\n"+
-					"/regione <code>nome_regione nome_dei_campi</code>\nper ottenere un confronto tra campi a tua scelta sulla desiderata\nDigita /start per visualizzare il manuale.", update.Message.Chat.ID, echotron.PARSE_HTML)
-			}
+			b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 			return
 		}
 
@@ -682,20 +689,17 @@ func (b *bot) textRegion(update *echotron.Update) {
 // Handles "provincia" textual command
 func (b *bot) textProvince(update *echotron.Update) {
 	dirPath := workingDirectory + imageFolder
+	usageMessage := "<b>Uso Corretto del Comando:\n</b>/provincia <code>nome_provincia totale_casi</code>" +
+		"\nper ottenere informazioni sul totale dei casi della provincia scelta\n" +
+		"/provincia <code>nome_provincia nuovi_positivi</code>\nper ottenere informazioni sui nuovi positivi della provincia scelta\nDigita /help per visualizzare il manuale."
 
 	message := strings.Replace(update.Message.Text, "/provincia ", "", 1)
 	tokens := strings.Split(message, " ")
-	if len(tokens) < 2 {
-		if update.Message.Chat.Type == "private" {
-			b.SendMessage("<b>Uso Corretto del Comando:\n</b>/provincia <code>nome_provincia totale_casi</code>"+
-				"\nper ottenere informazioni sul totale dei casi della provincia scelta\n"+
-				"/provincia <code>nome_provincia nuovi_positivi</code>\nper ottenere informazioni sui nuovi positivi della provincia scelta\nDigita /start per visualizzare il manuale.", update.Message.Chat.ID, echotron.PARSE_HTML)
-		}
+	if len(tokens) != 2 {
+		b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 		return
 	}
-	if len(tokens) > 2 {
-		return
-	}
+
 	tokens[0] = strings.Replace(tokens[0], "_", " ", -1)
 
 	provinceId, err := covidgraphs.FindFirstOccurrenceProvince(&provincesData, "denominazione_provincia", tokens[0])
@@ -719,22 +723,14 @@ func (b *bot) textProvince(update *echotron.Update) {
 
 		if err != nil {
 			log.Println(err)
-			if update.Message.Chat.Type == "private" {
-				b.SendMessage("<b>Uso Corretto del Comando:\n</b>/provincia <code>nome_provincia totale_casi</code>"+
-					"\nper ottenere informazioni sul totale dei casi della provincia scelta\n"+
-					"/provincia <code>nome_provincia nuovi_positivi</code>\nper ottenere informazioni sui nuovi positivi della provincia scelta\nDigita /start per visualizzare il manuale.", update.Message.Chat.ID, echotron.PARSE_HTML)
-			}
+			b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 			return
 		}
 
 		provinceLastId, err := covidgraphs.FindLastOccurrenceProvince(&provincesData, "denominazione_provincia", tokens[0])
 		if err != nil {
 			log.Println(err)
-			if update.Message.Chat.Type == "private" {
-				b.SendMessage("<b>Uso Corretto del Comando:\n</b>/provincia <code>nome_provincia totale_casi</code>"+
-					"\nper ottenere informazioni sul totale dei casi della provincia scelta\n"+
-					"/provincia <code>nome_provincia nuovi_positivi</code>\nper ottenere informazioni sui nuovi positivi della provincia scelta\nDigita /start per visualizzare il manuale.", update.Message.Chat.ID, echotron.PARSE_HTML)
-			}
+			b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 			return
 		}
 
@@ -755,20 +751,14 @@ func (b *bot) textProvince(update *echotron.Update) {
 
 		if err != nil {
 			log.Println(err)
-			if update.Message.Chat.Type == "private" {
-				b.SendMessage("<b>Uso Corretto del Comando:\n</b>/provincia <code>nome_provincia totale_casi</code>"+
-					"\nper ottenere informazioni sul totale dei casi della provincia scelta\n"+
-					"/provincia <code>nome_provincia nuovi_positivi</code>\nper ottenere informazioni sui nuovi positivi della provincia scelta\nDigita /start per visualizzare il manuale.", update.Message.Chat.ID, echotron.PARSE_HTML)
-			}
+			b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 			return
 		}
 
 		provinceLastId, err := covidgraphs.FindLastOccurrenceProvince(&provincesData, "denominazione_provincia", tokens[0])
 		if err != nil {
 			log.Println(err)
-			b.SendMessage("<b>Uso Corretto del Comando:\n</b>/provincia <code>nome_provincia totale_casi</code>"+
-				"\nper ottenere informazioni sul totale dei casi della provincia scelta\n"+
-				"/provincia <code>nome_provincia nuovi_positivi</code>\nper ottenere informazioni sui nuovi positivi della provincia scelta\nDigita /start per visualizzare il manuale.", update.Message.Chat.ID, echotron.PARSE_HTML)
+			b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 			return
 		}
 
