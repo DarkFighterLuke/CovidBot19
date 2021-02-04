@@ -115,7 +115,7 @@ func main() {
 }
 
 func (b *bot) Update(update *echotron.Update) {
-	if update.CallbackQuery == nil {
+	if update.Message != nil {
 		keywords := strings.Split(update.Message.Text, " ")
 		if keywords[0] == "/start" || keywords[0] == "/start"+botUsername {
 			b.sendStart(update)
@@ -135,7 +135,7 @@ func (b *bot) Update(update *echotron.Update) {
 			b.credits(update.Message.Chat.ID)
 		}
 
-	} else {
+	} else if update.CallbackQuery != nil {
 		cq := update.CallbackQuery
 		switch strings.ToLower(cq.Data) {
 		case "credits":
@@ -490,12 +490,15 @@ func (b *bot) home(update *echotron.Update) {
 // Handles "report" textual command
 func (b *bot) textReport(update *echotron.Update) {
 	usageMessage := "<b>Uso Corretto del Comando:\n" +
-		"/reports <code>[file] nome_report</code>\nDigita /help per visualizzare il manuale."
+		"/reports <code>[file] nome_report</code>\nReport disponibili:{<code>" +
+		strings.Join(reports, ", ") + "</code>}\nDigita /help per visualizzare il manuale."
 
-	message := strings.Replace(update.Message.Text, "/reports ", "", 1)
+	tokens := strings.Fields(update.Message.Text)
+	tokens = tokens[1:]
+
 	var fieldNames []string
 	var flagFile bool = false
-	tokens := strings.Split(message, " ")
+
 	if len(tokens) < 1 {
 		b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 		return
@@ -553,7 +556,8 @@ func (b *bot) textReport(update *echotron.Update) {
 // Handles "nazione" textual command
 func (b *bot) textNation(update *echotron.Update) {
 	usageMessage := "<b>Uso Corretto del Comando:\n</b>/nazione <code>andamento</code>\nper ottenere l'andamento della nazione\n" +
-		"/nazione <code>nome_dei_campi</code>\nper ottenere un confronto tra campi a tua scelta\nDigita /help per visualizzare il manuale."
+		"/nazione <code>nome_dei_campi</code>\nper ottenere un confronto tra campi a tua scelta\n" +
+		"Dati nazione disponibili:\n{<code>" + strings.Join(natregAttributes, ", ") + "</code>}\nDigita /help per visualizzare il manuale."
 
 	tokens := strings.Fields(update.Message.Text)
 	tokens = tokens[1:]
@@ -617,11 +621,13 @@ func (b *bot) textNation(update *echotron.Update) {
 func (b *bot) textRegion(update *echotron.Update) {
 	dirPath := workingDirectory + imageFolder
 	usageMessage := "<b>Uso Corretto del Comando:\n</b>/regione <code>nome_regione andamento</code>\nper ottenere l'andamento della regione scelta\n" +
-		"/regione <code>nome_regione nome_dei_campi</code>\nper ottenere un confronto tra campi a tua scelta sulla desiderata\nDigita /help per visualizzare il manuale."
+		"/regione <code>nome_regione nome_dei_campi</code>\nper ottenere un confronto tra campi a tua scelta sulla desiderata\n" +
+		"Dati regione disponibili:\n{<code>" + strings.Join(natregAttributes, ", ") + "</code>}\nDigita /help per visualizzare il manuale."
 
-	message := strings.Replace(update.Message.Text, "/regione ", "", 1)
+	tokens := strings.Fields(update.Message.Text)
+	tokens = tokens[1:]
+
 	var fieldNames []string
-	tokens := strings.Split(message, " ")
 
 	if len(tokens) < 2 {
 		b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
@@ -681,9 +687,9 @@ func (b *bot) textRegion(update *echotron.Update) {
 			return
 		}
 
-		b.DeleteMessage(update.Message.Chat.ID, update.Message.ID)
 		b.SendPhoto(filename, setCaptionConfrontoRegione(regionId, fieldNames), update.Message.Chat.ID, echotron.PARSE_HTML)
 	}
+	b.DeleteMessage(update.Message.Chat.ID, update.Message.ID)
 }
 
 // Handles "provincia" textual command
@@ -693,8 +699,9 @@ func (b *bot) textProvince(update *echotron.Update) {
 		"\nper ottenere informazioni sul totale dei casi della provincia scelta\n" +
 		"/provincia <code>nome_provincia nuovi_positivi</code>\nper ottenere informazioni sui nuovi positivi della provincia scelta\nDigita /help per visualizzare il manuale."
 
-	message := strings.Replace(update.Message.Text, "/provincia ", "", 1)
-	tokens := strings.Split(message, " ")
+	tokens := strings.Fields(update.Message.Text)
+	tokens = tokens[1:]
+
 	if len(tokens) != 2 {
 		b.SendMessage(usageMessage, update.Message.Chat.ID, echotron.PARSE_HTML)
 		return
@@ -762,9 +769,9 @@ func (b *bot) textProvince(update *echotron.Update) {
 			return
 		}
 
-		b.DeleteMessage(update.Message.Chat.ID, update.Message.ID)
 		b.SendPhoto(filename, setCaptionConfrontoProvincia(provinceLastId, []string{tokens[1]}), update.Message.Chat.ID, echotron.PARSE_HTML)
 	}
+	b.DeleteMessage(update.Message.Chat.ID, update.Message.ID)
 }
 
 // Updates data from pcm-dpc repository
