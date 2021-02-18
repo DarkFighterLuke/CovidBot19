@@ -111,8 +111,7 @@ func main() {
 
 	// Creating bot instance using webhook mode
 	dsp := echotron.NewDispatcher(TOKEN, newBot)
-	//dsp.ListenWebhook("https://hiddenfile.tk:443/bot", 40987)
-	dsp.Poll()
+	dsp.ListenWebhook("https://hiddenfile.tk:443/bot", 40987)
 }
 
 func (b *bot) Update(update *echotron.Update) {
@@ -236,7 +235,7 @@ func (b *bot) Update(update *echotron.Update) {
 				log.Println(err)
 				return
 			}
-			b.EditMessageText(cq.Message.Chat.ID, cq.Message.ID, "Seleziona i campi che vuoi mettere a confronto:", buttons, echotron.PARSE_HTML)
+			b.EditMessageTextWithKeyboard(cq.Message.Chat.ID, cq.Message.ID, "Seleziona i campi che vuoi mettere a confronto:", buttons, echotron.PARSE_HTML)
 			b.AnswerCallbackQuery(cq.ID, "Crea confronto dati nazione", false)
 			b.lastButton = "zonesButtons"
 			b.lastRegion = ""
@@ -257,7 +256,7 @@ func (b *bot) Update(update *echotron.Update) {
 				log.Println(err)
 				return
 			}
-			b.EditMessageText(cq.Message.Chat.ID, cq.Message.ID, "Seleziona i campi che vuoi mettere a confronto:", buttons)
+			b.EditMessageTextWithKeyboard(cq.Message.Chat.ID, cq.Message.ID, "Seleziona i campi che vuoi mettere a confronto:", buttons)
 			b.AnswerCallbackQuery(cq.ID, "Crea confronto dati regione", false)
 			b.lastButton = "province"
 			b.lastProvince = ""
