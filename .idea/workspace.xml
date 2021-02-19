@@ -19,7 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c55a33a7-fbcd-4eb1-9cf8-e2a8d011c763" name="Default Changelist" comment="Fixed update handling in Update function which was previously causing panic in some situations&#10;Added available fields in help messages">
+    <list default="true" id="c55a33a7-fbcd-4eb1-9cf8-e2a8d011c763" name="Default Changelist" comment="Updated EditMessageText with EditMessageTextWithKeyboard according to the echotron library modifications">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
@@ -146,7 +146,8 @@
     <MESSAGE value="Switched to echotron telegram bot library" />
     <MESSAGE value="Enhanced in group usage adding usage message send" />
     <MESSAGE value="Fixed update handling in Update function which was previously causing panic in some situations&#10;Added available fields in help messages" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed update handling in Update function which was previously causing panic in some situations&#10;Added available fields in help messages" />
+    <MESSAGE value="Updated EditMessageText with EditMessageTextWithKeyboard according to the echotron library modifications" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated EditMessageText with EditMessageTextWithKeyboard according to the echotron library modifications" />
   </component>
   <component name="WindowStateProjectService">
     <state x="760" y="450" key="#GOROOT" timestamp="1612366764267">
@@ -162,10 +163,6 @@
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="692" y="356" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1920.1044@0.0.1920.1044" timestamp="1612456086959" />
-    <state x="585" y="78" key="CommitChangelistDialog2" timestamp="1604958720953">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="585" y="78" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1604958720953" />
     <state x="740" y="276" width="424" height="491" key="FileChooserDialogImpl" timestamp="1612477751682">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
@@ -203,11 +200,10 @@
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="439" y="153" key="SettingsEditor/0.0.1920.1044@0.0.1920.1044" timestamp="1612366823230" />
-    <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2" timestamp="1612478896636">
+    <state x="555" y="256" width="800" height="538" key="Vcs.Push.Dialog.v2" timestamp="1613688936037">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
-    <state x="555" y="255" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1604958737381" />
-    <state x="555" y="256" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1612478896636" />
+    <state x="555" y="256" key="Vcs.Push.Dialog.v2/0.0.1920.1044@0.0.1920.1044" timestamp="1613688936037" />
     <state x="722" y="428" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1612446922201">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
@@ -217,10 +213,10 @@
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="709" y="322" key="git4idea.ui.GitUnstashDialog/0.0.1920.1044@0.0.1920.1044" timestamp="1612478803868" />
-    <state x="623" y="226" width="672" height="682" key="search.everywhere.popup" timestamp="1612380562780">
+    <state x="623" y="226" width="672" height="682" key="search.everywhere.popup" timestamp="1613688866172">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state x="623" y="225" width="672" height="679" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607552034517" />
-    <state x="623" y="226" width="672" height="682" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1612380562780" />
+    <state x="623" y="226" width="672" height="682" key="search.everywhere.popup/0.0.1920.1044@0.0.1920.1044" timestamp="1613688866172" />
   </component>
 </project>
