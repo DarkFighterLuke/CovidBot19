@@ -1,8 +1,8 @@
 package main
 
 import (
-	"covidgraphs"
 	"fmt"
+	"github.com/DarkFighterLuke/covidgraphs"
 	"github.com/NicoNex/echotron"
 	"log"
 	"os"
@@ -25,7 +25,7 @@ func (b *bot) callbackNuoviCasiNazione(cq *echotron.CallbackQuery) {
 		}
 	}
 
-	buttons, err := b.makeButtons([]string{"Torna alla Home"}, []string{"sendHome"}, 1)
+	buttons, err := b.makeButtons([]string{"Torna alla Home"}, []string{"home"}, 1)
 	if err != nil {
 		log.Println(err)
 		return
@@ -58,7 +58,7 @@ func (b *bot) callbackNuoviCasiRegione(cq *echotron.CallbackQuery) {
 		}
 	}
 
-	buttons, err := b.makeButtons([]string{"Torna alla Regione", "Torna alla Home"}, []string{b.lastRegion, "sendHome"}, 1)
+	buttons, err := b.makeButtons([]string{"Torna alla Regione", "Torna alla Home"}, []string{b.lastRegion, "home"}, 1)
 	if err != nil {
 		log.Println(err)
 		return
@@ -138,7 +138,7 @@ func (b *bot) callbackConfrontoDatiRegione(cq *echotron.CallbackQuery) {
 
 func (b *bot) callbackClassificaRegioni(cq *echotron.CallbackQuery) {
 	//TODO: grafico a barre classifica
-	homeButton, err := b.makeButtons([]string{"Torna alla Home"}, []string{"sendHome"}, 1)
+	homeButton, err := b.makeButtons([]string{"Torna alla Home"}, []string{"home"}, 1)
 	if err != nil {
 		log.Println(err)
 		return
@@ -149,7 +149,7 @@ func (b *bot) callbackClassificaRegioni(cq *echotron.CallbackQuery) {
 
 func (b *bot) callbackClassificaProvince(cq *echotron.CallbackQuery) {
 	//TODO: grafico a barre classifica
-	homeButton, err := b.makeButtons([]string{"Torna alla Home"}, []string{"sendHome"}, 1)
+	homeButton, err := b.makeButtons([]string{"Torna alla Home"}, []string{"home"}, 1)
 	if err != nil {
 		log.Println(err)
 		return
@@ -258,7 +258,7 @@ func (b *bot) callbackReports(cq *echotron.CallbackQuery) {
 }
 
 func (b *bot) callbackReportGenerale(cq *echotron.CallbackQuery) {
-	buttons, err := b.makeButtons([]string{"Genera file", "Torna alla Home"}, []string{"genera_file", "sendHome"}, 1)
+	buttons, err := b.makeButtons([]string{"Genera file", "Torna alla Home"}, []string{"genera_file", "home"}, 1)
 	if err != nil {
 		log.Println("Errore", err)
 		return

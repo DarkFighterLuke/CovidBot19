@@ -1,8 +1,8 @@
 package main
 
 import (
-	"covidgraphs"
 	"fmt"
+	"github.com/DarkFighterLuke/covidgraphs"
 	"github.com/NicoNex/echotron"
 	"github.com/robfig/cron"
 	"log"
@@ -109,7 +109,7 @@ func (b *bot) Update(update *echotron.Update) {
 			b.sendStart(update)
 		} else if keywords[0] == "/help" || keywords[0] == "/help"+botUsername {
 			b.sendHelp(update)
-		} else if keywords[0] == "/sendHome" || keywords[0] == "/sendHome"+botUsername {
+		} else if keywords[0] == "/home" || keywords[0] == "/home"+botUsername {
 			b.sendHome(update)
 		} else if keywords[0] == "/nazione" || keywords[0] == "/nazione"+botUsername {
 			b.textNation(update)
@@ -119,14 +119,15 @@ func (b *bot) Update(update *echotron.Update) {
 			b.textProvince(update)
 		} else if keywords[0] == "/reports" || keywords[0] == "/reports"+botUsername {
 			b.textReport(update)
-		} else if keywords[0] == "/sendCredits" || keywords[0] == "/sendCredits"+botUsername {
+		} else if keywords[0] == "/credits" || keywords[0] == "/credits"+botUsername {
 			b.sendCredits(update.Message.Chat.ID)
 		}
 
 	} else if update.CallbackQuery != nil {
 		cq := update.CallbackQuery
+		fmt.Println(cq.Data)
 		switch strings.ToLower(cq.Data) {
-		case "sendCredits":
+		case "credits":
 			b.sendCredits(update.CallbackQuery.Message.Chat.ID)
 			b.AnswerCallbackQuery(cq.ID, "Crediti", false)
 		case "nuovi casi nazione":
@@ -168,7 +169,7 @@ func (b *bot) Update(update *echotron.Update) {
 			b.callbackProvince(cq)
 			break
 
-		case "sendHome":
+		case "home":
 			b.callbackHome(cq)
 			break
 		case "annulla":

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"covidgraphs"
+	"github.com/DarkFighterLuke/covidgraphs"
 	"log"
 	"strconv"
 	"time"

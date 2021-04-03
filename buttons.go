@@ -1,8 +1,8 @@
 package main
 
 import (
-	"covidgraphs"
 	"fmt"
+	"github.com/DarkFighterLuke/covidgraphs"
 	"github.com/NicoNex/echotron"
 	"log"
 	"strings"
@@ -80,8 +80,8 @@ func (b *bot) zonesButtons() ([]byte, error) {
 
 // Creates provinces buttons set
 func (b *bot) provinceButtons() ([]byte, error) {
-	buttonsNames := []string{"Nuovi casi 🆕", "Province della regione", "Confronto dati regione 📈", "Torna alla sendHome"}
-	callbackNames := []string{"nuovi casi regione", "province", "confronto dati regione", "sendHome"}
+	buttonsNames := []string{"Nuovi casi 🆕", "Province della regione", "Confronto dati regione 📈", "Torna alla home"}
+	callbackNames := []string{"nuovi casi regione", "province", "confronto dati regione", "home"}
 	buttons, err := b.makeButtons(buttonsNames, callbackNames, 1)
 	if err != nil {
 		log.Println(err)

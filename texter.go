@@ -1,8 +1,8 @@
 package main
 
 import (
-	"covidgraphs"
 	"fmt"
+	"github.com/DarkFighterLuke/covidgraphs"
 	"github.com/NicoNex/echotron"
 	"log"
 	"os"

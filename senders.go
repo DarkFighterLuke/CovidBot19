@@ -1,8 +1,8 @@
 package main
 
 import (
-	"covidgraphs"
 	"fmt"
+	"github.com/DarkFighterLuke/covidgraphs"
 	"github.com/NicoNex/echotron"
 	"log"
 	"strings"
@@ -76,8 +76,8 @@ func (b *bot) sendAndamentoProvinciale(cq *echotron.CallbackQuery, provinceIndex
 		}
 	}
 
-	buttonsNames := []string{"Torna alla regione", "Torna alla sendHome"}
-	callbackNames := []string{b.lastRegion, "sendHome"}
+	buttonsNames := []string{"Torna alla regione", "Torna alla home"}
+	callbackNames := []string{b.lastRegion, "home"}
 	buttons, err := b.makeButtons(buttonsNames, callbackNames, 1)
 	if err != nil {
 		log.Println(err)
@@ -130,8 +130,8 @@ func (b *bot) sendConfrontoDatiRegione(cq *echotron.CallbackQuery) {
 		}
 	}
 
-	buttonsNames := []string{"Torna alla regione", "Torna alla sendHome"}
-	callbackNames := []string{b.lastRegion, "sendHome"}
+	buttonsNames := []string{"Torna alla regione", "Torna alla home"}
+	callbackNames := []string{b.lastRegion, "home"}
 	buttons, err := b.makeButtons(buttonsNames, callbackNames, 1)
 	if err != nil {
 		log.Println(err)
@@ -182,8 +182,8 @@ func (b *bot) sendConfrontoDatiNazione(cq *echotron.CallbackQuery) {
 		}
 	}
 
-	buttonsNames := []string{"Torna alla sendHome"}
-	callbackNames := []string{"sendHome"}
+	buttonsNames := []string{"Torna alla home"}
+	callbackNames := []string{"home"}
 	buttons, err := b.makeButtons(buttonsNames, callbackNames, 1)
 	if err != nil {
 		log.Println(err)
@@ -202,7 +202,7 @@ func (b *bot) sendHelp(update *echotron.Update) {
 // Handles "start" command
 func (b *bot) sendStart(update *echotron.Update) {
 	if update.Message.Chat.Type == "private" {
-		buttons, err := b.makeButtons([]string{"Credits 🌟", "Vai ai Dati 📊"}, []string{"sendCredits", "sendHome"}, 1)
+		buttons, err := b.makeButtons([]string{"Credits 🌟", "Vai ai Dati 📊"}, []string{"credits", "home"}, 1)
 		if err != nil {
 			log.Println(err)
 		}
@@ -230,7 +230,7 @@ Digita /help per scoprire i comandi disponibili.
 	}
 }
 
-// Handles "sendHome" command
+// Handles "home" command
 func (b *bot) sendHome(update *echotron.Update) {
 	log.Println("[HOME] Nation: " + fmt.Sprint(nationData) + "\nRegions: " + fmt.Sprint(regionsData) + "\nProvinces: " + fmt.Sprint(provincesData) + "\t" + update.Message.Chat.FirstName + "\n")
 	if update.Message.Chat.Type == "private" {
@@ -243,9 +243,9 @@ func (b *bot) sendHome(update *echotron.Update) {
 	}
 }
 
-// Sends sendCredits message
+// Sends credits message
 func (b *bot) sendCredits(chatId int64) {
-	buttons, err := b.makeButtons([]string{"Torna alla Home"}, []string{"sendHome"}, 1)
+	buttons, err := b.makeButtons([]string{"Torna alla Home"}, []string{"home"}, 1)
 	if err != nil {
 		log.Println(err)
 	}
