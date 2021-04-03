@@ -232,7 +232,6 @@ Digita /help per scoprire i comandi disponibili.
 
 // Handles "home" command
 func (b *bot) sendHome(update *echotron.Update) {
-	log.Println("[HOME] Nation: " + fmt.Sprint(nationData) + "\nRegions: " + fmt.Sprint(regionsData) + "\nProvinces: " + fmt.Sprint(provincesData) + "\t" + update.Message.Chat.FirstName + "\n")
 	if update.Message.Chat.Type == "private" {
 		b.sendAndamentoNazionale(update.Message)
 		buttons, err := b.mainMenuButtons()
