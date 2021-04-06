@@ -3,12 +3,14 @@ package main
 import (
 	"fmt"
 	"github.com/DarkFighterLuke/covidgraphs"
+	"github.com/DarkFighterLuke/gitUpdateChecker/v2"
 	"github.com/NicoNex/echotron"
-	"github.com/robfig/cron"
+	"github.com/robfig/cron/v3"
 	"log"
 	"os"
 	"strings"
 	"sync"
+	"time"
 )
 
 const (
@@ -82,19 +84,39 @@ func newBot(chatId int64) echotron.Bot {
 	}
 }
 
+func checkUpdate(frequency time.Duration, stop chan bool) {
+	_ = gitUpdateChecker.SetRepoInfo("https://github.com/pcm-dpc/COVID-19.git", "master")
+	ch, err := gitUpdateChecker.StartUpdateProcess(frequency)
+	if err != nil {
+		log.Println(err)
+	}
+
+	for {
+		select {
+		case u := <-ch:
+			if u {
+				log.Println("There is a new commit on pandemic data repository. Retrieving data...")
+				updateData(&nationData, &regionsData, &provincesData, &datiNote)
+			}
+		case s := <-stop:
+			if s {
+				return
+			}
+		}
+	}
+}
+
 func main() {
 	log.SetOutput(os.Stdout)
 	//http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	initFolders()
 	updateData(&nationData, &regionsData, &provincesData, &datiNote)()
 
-	// TODO: implement github monitoring for anytime update
 	// Planning cronjobs to update data from pcm-dpc repo
+	stop := make(chan bool)
 	var cronjob = cron.New()
-	cronjob.AddFunc("TZ=Europe/Rome 15 17 * * *", updateData(&nationData, &regionsData, &provincesData, &datiNote))
-	cronjob.AddFunc("TZ=Europe/Rome 40 17 * * *", updateData(&nationData, &regionsData, &provincesData, &datiNote))
-	cronjob.AddFunc("TZ=Europe/Rome 00 18 * * *", updateData(&nationData, &regionsData, &provincesData, &datiNote))
-	cronjob.AddFunc("TZ=Europe/Rome 05 18 * * *", updateData(&nationData, &regionsData, &provincesData, &datiNote))
+	_, _ = cronjob.AddFunc("CRON_TZ=Europe/Rome 00 16 * * *", func() { checkUpdate(30*time.Second, stop) })
+	_, _ = cronjob.AddFunc("CRON_TZ=Europe/Rome 00 19 * * *", func() { stop <- true })
 	cronjob.Start()
 
 	// Creating bot instance using webhook mode

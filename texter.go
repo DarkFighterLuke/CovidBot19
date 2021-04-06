@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+// TODO: Use inline keyboards instead of handwritten command
 // Handles "report" textual command
 func (b *bot) textReport(update *echotron.Update) {
 	usageMessage := "<b>Uso Corretto del Comando:</b>\n/reports <code>[file] nome_report</code>\nReport disponibili:{<code>" +
@@ -76,6 +77,7 @@ func (b *bot) textReport(update *echotron.Update) {
 	}
 }
 
+// TODO: Use inline keyboards instead of handwritten command
 // Handles "nazione" textual command
 func (b *bot) textNation(update *echotron.Update) {
 	usageMessage := "<b>Uso Corretto del Comando:\n</b>/nazione <code>andamento</code>\nper ottenere l'andamento della nazione\n" +
@@ -140,6 +142,7 @@ func (b *bot) textNation(update *echotron.Update) {
 	b.DeleteMessage(update.Message.Chat.ID, update.Message.ID)
 }
 
+// TODO: Use inline keyboards instead of handwritten command
 // Handles "regione" textual command
 func (b *bot) textRegion(update *echotron.Update) {
 	dirPath := workingDirectory + imageFolder
@@ -215,6 +218,7 @@ func (b *bot) textRegion(update *echotron.Update) {
 	b.DeleteMessage(update.Message.Chat.ID, update.Message.ID)
 }
 
+// TODO: Use inline keyboards instead of handwritten command
 // Handles "provincia" textual command
 func (b *bot) textProvince(update *echotron.Update) {
 	dirPath := workingDirectory + imageFolder
