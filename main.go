@@ -96,7 +96,7 @@ func checkUpdate(frequency time.Duration, stop chan bool) {
 		case u := <-ch:
 			if u {
 				log.Println("There is a new commit on pandemic data repository. Retrieving data...")
-				updateData(&nationData, &regionsData, &provincesData, &datiNote)
+				updateData(&nationData, &regionsData, &provincesData, &datiNote)()
 			}
 		case s := <-stop:
 			if s {
