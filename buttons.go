@@ -9,35 +9,22 @@ import (
 )
 
 // Creates buttons sets
-func (b *bot) makeButtons(buttonsText []string, callbacksData []string, layout int) ([]byte, error) {
-	if layout != 1 && layout != 2 {
-		return nil, fmt.Errorf("wrong layout")
-	}
-	if len(buttonsText) != len(callbacksData) {
+func (b *bot) makeButtons(buttonsText []string, callbacksData []string, layoutCols int) ([]byte, error) {
+	if len(buttonsText) != len(callbacksData) || layoutCols <= 0 {
 		return nil, fmt.Errorf("different text and data length")
 	}
 
 	buttons := make([]echotron.InlineButton, 0)
-	for i, v := range buttonsText {
-		buttons = append(buttons, b.InlineKbdBtn(v, "", callbacksData[i]))
-	}
-
 	keys := make([]echotron.InlineKbdRow, 0)
-	switch layout {
-	case 1:
-		for i := 0; i < len(buttons); i++ {
-			keys = append(keys, echotron.InlineKbdRow{buttons[i]})
-		}
-		break
-	case 2:
-		for i := 0; i < len(buttons); i += 2 {
-			if i+1 < len(buttons) {
-				keys = append(keys, echotron.InlineKbdRow{buttons[i], buttons[i+1]})
+	for i, v := range buttonsText {
+		for j := 0; j < layoutCols; j++ {
+			if j > len(buttonsText)-i {
+				break
 			} else {
-				keys = append(keys, echotron.InlineKbdRow{buttons[i]})
+				buttons = append(buttons, b.InlineKbdBtn(v, "", callbacksData[i]))
 			}
 		}
-		break
+		keys = append(keys, buttons)
 	}
 
 	inlineKMarkup := b.InlineKbdMarkup(keys...)
