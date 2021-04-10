@@ -94,16 +94,7 @@ func (b *bot) callbackZonesButtons(cq *echotron.CallbackQuery) {
 }
 
 func (b *bot) callbackConfrontoDatiNazione(cq *echotron.CallbackQuery) {
-	buttonsNames := []string{"Ricoverati con sintomi", "Terapia intensiva", "Totale ospedalizzati", "Isolamento domiciliare", "Attualmente positivi", "Nuovi positivi", "Dimessi guariti", "Deceduti", "Totale casi", "Tamponi"}
-	buttonsCallback := make([]string, 0)
-	for _, v := range buttonsNames {
-		buttonsCallback = append(buttonsCallback, strings.ToLower(v)+" nazione")
-	}
-	buttonsNames = append(buttonsNames, "Annulla ❌")
-	buttonsCallback = append(buttonsCallback, "annulla")
-	buttonsNames = append(buttonsNames, "Fatto ✅")
-	buttonsCallback = append(buttonsCallback, "fatto")
-	buttons, err := b.makeButtons(buttonsNames, buttonsCallback, 2)
+	buttons, err := b.buttonsConfrontoNazione()
 	if err != nil {
 		log.Println(err)
 		return
@@ -116,16 +107,7 @@ func (b *bot) callbackConfrontoDatiNazione(cq *echotron.CallbackQuery) {
 }
 
 func (b *bot) callbackConfrontoDatiRegione(cq *echotron.CallbackQuery) {
-	buttonsNames := []string{"Ricoverati con sintomi", "Terapia intensiva", "Totale ospedalizzati", "Isolamento domiciliare", "Attualmente positivi", "Nuovi positivi", "Dimessi guariti", "Deceduti", "Totale casi", "Tamponi"}
-	buttonsCallback := make([]string, 0)
-	for _, v := range buttonsNames {
-		buttonsCallback = append(buttonsCallback, strings.ToLower(v)+" regione")
-	}
-	buttonsNames = append(buttonsNames, "Annulla ❌")
-	buttonsCallback = append(buttonsCallback, "annulla")
-	buttonsNames = append(buttonsNames, "Fatto ✅")
-	buttonsCallback = append(buttonsCallback, "fatto")
-	buttons, err := b.makeButtons(buttonsNames, buttonsCallback, 2)
+	buttons, err := b.buttonsConfrontoRegione()
 	if err != nil {
 		log.Println(err)
 		return
