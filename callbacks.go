@@ -392,29 +392,9 @@ func (b *bot) caseConfrontoRegione(cq *echotron.CallbackQuery) error {
 	switch cq.Data {
 	case "ricoverati con sintomi regione":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "ricoverati con sintomi")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInRegionChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " regione", "", -1)
-			if !b.isStringFoundInRegionChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto regione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoRegione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -422,29 +402,9 @@ func (b *bot) caseConfrontoRegione(cq *echotron.CallbackQuery) error {
 		break
 	case "terapia intensiva regione":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "terapia intensiva")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInRegionChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " regione", "", -1)
-			if !b.isStringFoundInRegionChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto regione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoRegione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -452,29 +412,9 @@ func (b *bot) caseConfrontoRegione(cq *echotron.CallbackQuery) error {
 		break
 	case "totale ospedalizzati regione":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "totale ospedalizzati")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInRegionChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " regione", "", -1)
-			if !b.isStringFoundInRegionChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto regione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoRegione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -482,29 +422,9 @@ func (b *bot) caseConfrontoRegione(cq *echotron.CallbackQuery) error {
 		break
 	case "isolamento domiciliare regione":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "isolamento domiciliare")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInRegionChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " regione", "", -1)
-			if !b.isStringFoundInRegionChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto regione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoRegione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -512,29 +432,9 @@ func (b *bot) caseConfrontoRegione(cq *echotron.CallbackQuery) error {
 		break
 	case "attualmente positivi regione":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "attualmente positivi")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInRegionChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " regione", "", -1)
-			if !b.isStringFoundInRegionChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto regione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoRegione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -542,29 +442,9 @@ func (b *bot) caseConfrontoRegione(cq *echotron.CallbackQuery) error {
 		break
 	case "nuovi positivi regione":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "nuovi positivi")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInRegionChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " regione", "", -1)
-			if !b.isStringFoundInRegionChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto regione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoRegione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -572,29 +452,9 @@ func (b *bot) caseConfrontoRegione(cq *echotron.CallbackQuery) error {
 		break
 	case "dimessi guariti regione":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "dimessi guariti")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInRegionChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " regione", "", -1)
-			if !b.isStringFoundInRegionChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto regione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoRegione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -602,29 +462,9 @@ func (b *bot) caseConfrontoRegione(cq *echotron.CallbackQuery) error {
 		break
 	case "deceduti regione":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "deceduti")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInRegionChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " regione", "", -1)
-			if !b.isStringFoundInRegionChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto regione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoRegione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -632,29 +472,9 @@ func (b *bot) caseConfrontoRegione(cq *echotron.CallbackQuery) error {
 		break
 	case "totale casi regione":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "totale casi")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInRegionChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " regione", "", -1)
-			if !b.isStringFoundInRegionChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto regione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoRegione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -662,29 +482,9 @@ func (b *bot) caseConfrontoRegione(cq *echotron.CallbackQuery) error {
 		break
 	case "tamponi regione":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "tamponi")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInRegionChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " regione", "", -1)
-			if !b.isStringFoundInRegionChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto regione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoRegione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -713,29 +513,9 @@ func (b *bot) caseConfrontoNazione(cq *echotron.CallbackQuery) error {
 	switch cq.Data {
 	case "ricoverati con sintomi nazione":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "ricoverati con sintomi")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInNationChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " nazione", "", -1)
-			if !b.isStringFoundInNationChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto nazione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoNazione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -743,29 +523,9 @@ func (b *bot) caseConfrontoNazione(cq *echotron.CallbackQuery) error {
 		break
 	case "terapia intensiva nazione":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "terapia intensiva")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInNationChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " nazione", "", -1)
-			if !b.isStringFoundInNationChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto nazione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoNazione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -773,29 +533,9 @@ func (b *bot) caseConfrontoNazione(cq *echotron.CallbackQuery) error {
 		break
 	case "totale ospedalizzati nazione":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "totale ospedalizzati")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInNationChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " nazione", "", -1)
-			if !b.isStringFoundInNationChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto nazione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoNazione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -803,29 +543,9 @@ func (b *bot) caseConfrontoNazione(cq *echotron.CallbackQuery) error {
 		break
 	case "isolamento domiciliare nazione":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "isolamento domiciliare")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInNationChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " nazione", "", -1)
-			if !b.isStringFoundInNationChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto nazione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoNazione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -833,29 +553,9 @@ func (b *bot) caseConfrontoNazione(cq *echotron.CallbackQuery) error {
 		break
 	case "attualmente positivi nazione":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "attualmente positivi")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInNationChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " nazione", "", -1)
-			if !b.isStringFoundInNationChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto nazione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoNazione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -863,29 +563,9 @@ func (b *bot) caseConfrontoNazione(cq *echotron.CallbackQuery) error {
 		break
 	case "nuovi positivi nazione":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "nuovi positivi")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInNationChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " nazione", "", -1)
-			if !b.isStringFoundInNationChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto nazione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoNazione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -893,29 +573,9 @@ func (b *bot) caseConfrontoNazione(cq *echotron.CallbackQuery) error {
 		break
 	case "dimessi guariti nazione":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "dimessi guariti")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInNationChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " nazione", "", -1)
-			if !b.isStringFoundInNationChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto nazione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoNazione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -923,29 +583,9 @@ func (b *bot) caseConfrontoNazione(cq *echotron.CallbackQuery) error {
 		break
 	case "deceduti nazione":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "deceduti")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInNationChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " nazione", "", -1)
-			if !b.isStringFoundInNationChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto nazione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoNazione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -953,29 +593,9 @@ func (b *bot) caseConfrontoNazione(cq *echotron.CallbackQuery) error {
 		break
 	case "totale casi nazione":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "totale casi")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInNationChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " nazione", "", -1)
-			if !b.isStringFoundInNationChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto nazione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoNazione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
@@ -983,29 +603,9 @@ func (b *bot) caseConfrontoNazione(cq *echotron.CallbackQuery) error {
 		break
 	case "tamponi nazione":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "tamponi")
-		newButtonsNames := make([]string, 0)
-		newButtonsCallback := make([]string, 0)
-
-		for _, v := range buttonsNames {
-
-			if !b.isStringFoundInNationChoices(v) {
-				newButtonsNames = append(newButtonsNames, v)
-			}
-		}
-		for _, v := range buttonsCallback {
-			strStripped := strings.Replace(v, " nazione", "", -1)
-			if !b.isStringFoundInNationChoices(strStripped) {
-				newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
-			}
-		}
-
-		newButtonsNames = append(newButtonsNames, "Annulla ❌")
-		newButtonsCallback = append(newButtonsCallback, "annulla")
-		newButtonsNames = append(newButtonsNames, "Fatto ✅")
-		newButtonsCallback = append(newButtonsCallback, "fatto nazione")
-		buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
+		buttons, err := b.buttonsCaseConfrontoNazione()
 		if err != nil {
-			log.Println(err)
+			return err
 		}
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
