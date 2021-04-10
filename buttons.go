@@ -14,14 +14,15 @@ func (b *bot) makeButtons(buttonsText []string, callbacksData []string, layoutCo
 		return nil, fmt.Errorf("different text and data length")
 	}
 
-	buttons := make([]echotron.InlineButton, 0)
 	keys := make([]echotron.InlineKbdRow, 0)
 	for i, v := range buttonsText {
+		buttons := make([]echotron.InlineButton, 0)
 		for j := 0; j < layoutCols; j++ {
 			if j > len(buttonsText)-i {
 				break
 			} else {
 				buttons = append(buttons, b.InlineKbdBtn(v, "", callbacksData[i]))
+				fmt.Println(buttons)
 			}
 		}
 		keys = append(keys, buttons)
