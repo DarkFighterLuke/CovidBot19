@@ -137,8 +137,6 @@ func (b *bot) buttonsConfrontoNazione() ([]byte, error) {
 	}
 	buttonsNames = append(buttonsNames, "Annulla ❌")
 	buttonsCallback = append(buttonsCallback, "annulla")
-	buttonsNames = append(buttonsNames, "Fatto ✅")
-	buttonsCallback = append(buttonsCallback, "fatto")
 	buttons, err := b.makeButtons(buttonsNames, buttonsCallback, 2)
 	if err != nil {
 		return nil, err
@@ -155,8 +153,6 @@ func (b *bot) buttonsConfrontoRegione() ([]byte, error) {
 	}
 	buttonsNames = append(buttonsNames, "Annulla ❌")
 	buttonsCallback = append(buttonsCallback, "annulla")
-	buttonsNames = append(buttonsNames, "Fatto ✅")
-	buttonsCallback = append(buttonsCallback, "fatto")
 	buttons, err := b.makeButtons(buttonsNames, buttonsCallback, 2)
 	if err != nil {
 		return nil, err
