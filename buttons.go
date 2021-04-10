@@ -21,9 +21,9 @@ func (b *bot) makeButtons(buttonsText []string, callbacksData []string, layoutCo
 			if j > len(buttonsText)-i {
 				break
 			} else {
-				buttons = append(buttons, b.InlineKbdBtn(v, "", callbacksData[i]))
-				fmt.Println(buttons)
+				buttons = append(buttons, b.InlineKbdBtn(buttonsText[i], "", callbacksData[i]))
 			}
+			i++
 		}
 		keys = append(keys, buttons)
 	}
