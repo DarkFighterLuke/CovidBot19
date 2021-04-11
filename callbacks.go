@@ -633,7 +633,7 @@ func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
 		id := b.lastGroupAttrIndex
 	redoPrevious:
 		if id <= 0 {
-			id = 9
+			id = 10
 		} else {
 			id--
 		}
@@ -654,8 +654,7 @@ func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
 	case "next nazione groups":
 		id := b.lastGroupAttrIndex
 	redoNext:
-		if id >= 9 {
-
+		if id >= 10 {
 			id = 0
 		} else {
 			id++
@@ -681,7 +680,7 @@ func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
 
 	case "ricoverati con sintomi nazione groups":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "ricoverati con sintomi")
-		buttons, err := b.buttonsConfrontoNazioneGroups(1)
+		buttons, err := b.buttonsConfrontoNazioneGroups(2)
 		if err != nil {
 			return err
 		}
@@ -692,7 +691,7 @@ func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "terapia intensiva nazione groups":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "terapia intensiva")
-		buttons, err := b.buttonsConfrontoNazioneGroups(2)
+		buttons, err := b.buttonsConfrontoNazioneGroups(3)
 		if err != nil {
 			return err
 		}
@@ -703,7 +702,7 @@ func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "totale ospedalizzati nazione groups":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "totale ospedalizzati")
-		buttons, err := b.buttonsConfrontoNazioneGroups(3)
+		buttons, err := b.buttonsConfrontoNazioneGroups(4)
 		if err != nil {
 			return err
 		}
@@ -714,7 +713,7 @@ func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "isolamento domiciliare nazione groups":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "isolamento domiciliare")
-		buttons, err := b.buttonsConfrontoNazioneGroups(4)
+		buttons, err := b.buttonsConfrontoNazioneGroups(5)
 		if err != nil {
 			return err
 		}
@@ -725,7 +724,7 @@ func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "attualmente positivi nazione groups":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "attualmente positivi")
-		buttons, err := b.buttonsConfrontoNazioneGroups(5)
+		buttons, err := b.buttonsConfrontoNazioneGroups(6)
 		if err != nil {
 			return err
 		}
@@ -736,7 +735,7 @@ func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "nuovi positivi nazione groups":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "nuovi positivi")
-		buttons, err := b.buttonsConfrontoNazioneGroups(6)
+		buttons, err := b.buttonsConfrontoNazioneGroups(7)
 		if err != nil {
 			return err
 		}
@@ -747,7 +746,7 @@ func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "dimessi guariti nazione groups":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "dimessi guariti")
-		buttons, err := b.buttonsConfrontoNazioneGroups(7)
+		buttons, err := b.buttonsConfrontoNazioneGroups(8)
 		if err != nil {
 			return err
 		}
@@ -758,7 +757,7 @@ func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "deceduti nazione groups":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "deceduti")
-		buttons, err := b.buttonsConfrontoNazioneGroups(8)
+		buttons, err := b.buttonsConfrontoNazioneGroups(9)
 		if err != nil {
 			return err
 		}
@@ -769,7 +768,7 @@ func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "totale casi nazione groups":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "totale casi")
-		buttons, err := b.buttonsConfrontoNazioneGroups(9)
+		buttons, err := b.buttonsConfrontoNazioneGroups(10)
 		if err != nil {
 			return err
 		}
@@ -780,7 +779,7 @@ func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "tamponi nazione groups":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoRegione, "tamponi")
-		buttons, err := b.buttonsConfrontoNazioneGroups(10)
+		buttons, err := b.buttonsConfrontoNazioneGroups(0)
 		if err != nil {
 			return err
 		}
@@ -796,7 +795,7 @@ func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
 		} else {
 			b.sendConfrontoDatiNazione(cq)
 		}
-		b.choicesConfrontoRegione = make([]string, 0)
+		b.choicesConfrontoNazione = make([]string, 0)
 		b.lastGroupRegionIndex = 0
 		b.lastZoneIndex = 0
 		b.lastGroupAttrIndex = 0
@@ -871,7 +870,7 @@ func (b *bot) caseInGroupRegionAttr(cq *echotron.CallbackQuery) error {
 
 	case "ricoverati con sintomi region attr groups":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "ricoverati con sintomi")
-		buttons, err := b.buttonsConfrontoRegioneGroups(1)
+		buttons, err := b.buttonsConfrontoRegioneGroups(2)
 		if err != nil {
 			return err
 		}
@@ -882,7 +881,7 @@ func (b *bot) caseInGroupRegionAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "terapia intensiva region attr groups":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "terapia intensiva")
-		buttons, err := b.buttonsConfrontoRegioneGroups(2)
+		buttons, err := b.buttonsConfrontoRegioneGroups(3)
 		if err != nil {
 			return err
 		}
@@ -893,7 +892,7 @@ func (b *bot) caseInGroupRegionAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "totale ospedalizzati region attr groups":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "totale ospedalizzati")
-		buttons, err := b.buttonsConfrontoRegioneGroups(3)
+		buttons, err := b.buttonsConfrontoRegioneGroups(4)
 		if err != nil {
 			return err
 		}
@@ -904,7 +903,7 @@ func (b *bot) caseInGroupRegionAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "isolamento domiciliare region attr groups":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "isolamento domiciliare")
-		buttons, err := b.buttonsConfrontoRegioneGroups(4)
+		buttons, err := b.buttonsConfrontoRegioneGroups(5)
 		if err != nil {
 			return err
 		}
@@ -915,7 +914,7 @@ func (b *bot) caseInGroupRegionAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "attualmente positivi region attr groups":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "attualmente positivi")
-		buttons, err := b.buttonsConfrontoRegioneGroups(5)
+		buttons, err := b.buttonsConfrontoRegioneGroups(6)
 		if err != nil {
 			return err
 		}
@@ -926,7 +925,7 @@ func (b *bot) caseInGroupRegionAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "nuovi positivi region attr groups":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "nuovi positivi")
-		buttons, err := b.buttonsConfrontoRegioneGroups(6)
+		buttons, err := b.buttonsConfrontoRegioneGroups(7)
 		if err != nil {
 			return err
 		}
@@ -937,7 +936,7 @@ func (b *bot) caseInGroupRegionAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "dimessi guariti region attr groups":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "dimessi guariti")
-		buttons, err := b.buttonsConfrontoRegioneGroups(7)
+		buttons, err := b.buttonsConfrontoRegioneGroups(8)
 		if err != nil {
 			return err
 		}
@@ -948,7 +947,7 @@ func (b *bot) caseInGroupRegionAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "deceduti region attr groups":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "deceduti")
-		buttons, err := b.buttonsConfrontoRegioneGroups(8)
+		buttons, err := b.buttonsConfrontoRegioneGroups(9)
 		if err != nil {
 			return err
 		}
@@ -959,7 +958,7 @@ func (b *bot) caseInGroupRegionAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "totale casi region attr groups":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "totale casi")
-		buttons, err := b.buttonsConfrontoRegioneGroups(9)
+		buttons, err := b.buttonsConfrontoRegioneGroups(10)
 		if err != nil {
 			return err
 		}
@@ -970,7 +969,7 @@ func (b *bot) caseInGroupRegionAttr(cq *echotron.CallbackQuery) error {
 		break
 	case "tamponi region attr groups":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "tamponi")
-		buttons, err := b.buttonsConfrontoRegioneGroups(10)
+		buttons, err := b.buttonsConfrontoRegioneGroups(0)
 		if err != nil {
 			return err
 		}

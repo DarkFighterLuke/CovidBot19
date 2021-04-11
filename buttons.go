@@ -237,6 +237,16 @@ func (b *bot) buttonsConfrontoNazioneGroups(attributeIndex int) ([]byte, error) 
 	if attributeIndex >= len(extendedAttributeNames) || attributeIndex < 0 {
 		return nil, fmt.Errorf("attributeIndex out of range")
 	}
+	if len(b.choicesConfrontoNazione) == len(attributeNames) {
+		buttonNames := []string{"❌", "✅"}
+		buttonCallbacks := []string{"annulla nazione groups", "fatto nazione groups"}
+		buttons, err := b.makeButtons(buttonNames, buttonCallbacks, 2)
+		if err != nil {
+			return nil, err
+		}
+
+		return buttons, nil
+	}
 
 	if b.isStringFoundInNationChoices(extendedAttributeNames[attributeIndex]) {
 		return nil, fmt.Errorf("already chose")
@@ -316,7 +326,18 @@ func (b *bot) buttonsConfrontoRegioneGroups(attributeIndex int) ([]byte, error) 
 		return nil, fmt.Errorf("attributeIndex out of range")
 	}
 
-	if b.isStringFoundInNationChoices(extendedAttributeNames[attributeIndex]) {
+	if len(b.choicesConfrontoRegione) == len(attributeNames) {
+		buttonNames := []string{"❌", "✅"}
+		buttonCallbacks := []string{"annulla region groups", "fatto region groups"}
+		buttons, err := b.makeButtons(buttonNames, buttonCallbacks, 2)
+		if err != nil {
+			return nil, err
+		}
+
+		return buttons, nil
+	}
+
+	if b.isStringFoundInRegionChoices(extendedAttributeNames[attributeIndex]) {
 		return nil, fmt.Errorf("already chose")
 	}
 	buttonNames := []string{"«", extendedAttributeNames[attributeIndex], "»", "❌", "✅"}
