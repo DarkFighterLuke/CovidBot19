@@ -144,7 +144,9 @@ func (b *bot) sendConfrontoDatiRegione(cq *echotron.CallbackQuery) {
 	}
 
 	b.SendPhoto(filename, setCaptionConfrontoRegione(regionLastId, b.choicesConfrontoRegione), cq.Message.Chat.ID, echotron.PARSE_HTML)
-	b.SendMessageWithKeyboard("Opzioni disponibili:", cq.Message.Chat.ID, buttons)
+	if cq.Message.Chat.Type == "private" {
+		b.SendMessageWithKeyboard("Opzioni disponibili:", cq.Message.Chat.ID, buttons)
+	}
 	b.AnswerCallbackQuery(cq.ID, "Confronto effettuato", false)
 }
 
@@ -191,7 +193,9 @@ func (b *bot) sendConfrontoDatiNazione(cq *echotron.CallbackQuery) {
 	}
 
 	b.SendPhoto(filename, setCaptionConfrontoNazione(len(nationData)-1, b.choicesConfrontoNazione), cq.Message.Chat.ID, echotron.PARSE_HTML)
-	b.SendMessageWithKeyboard("Opzioni disponibili:", cq.Message.Chat.ID, buttons)
+	if cq.Message.Chat.Type == "private" {
+		b.SendMessageWithKeyboard("Opzioni disponibili:", cq.Message.Chat.ID, buttons)
+	}
 	b.AnswerCallbackQuery(cq.ID, "Confronto effettuato", false)
 }
 
