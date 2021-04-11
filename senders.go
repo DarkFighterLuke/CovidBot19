@@ -85,7 +85,9 @@ func (b *bot) sendAndamentoProvinciale(cq *echotron.CallbackQuery, provinceIndex
 	}
 
 	b.SendPhoto(filename, setCaptionProvince(provinceIndex), cq.Message.Chat.ID, echotron.PARSE_HTML)
-	b.SendMessageWithKeyboard("Opzioni disponibili:", cq.Message.Chat.ID, buttons)
+	if cq.Message.Chat.Type == "private" {
+		b.SendMessageWithKeyboard("Opzioni disponibili:", cq.Message.Chat.ID, buttons)
+	}
 	b.AnswerCallbackQuery(cq.ID, "Regione "+provincesData[provinceIndex].Denominazione_regione, false)
 	b.lastButton = cq.Data
 	b.lastProvince = cq.Data
