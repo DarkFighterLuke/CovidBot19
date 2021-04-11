@@ -202,7 +202,6 @@ func (b *bot) buttonsCaseConfrontoRegione() ([]byte, error) {
 	newButtonsCallback := make([]string, 0)
 
 	for _, v := range buttonsNames {
-
 		if !b.isStringFoundInRegionChoices(v) {
 			newButtonsNames = append(newButtonsNames, v)
 		}
@@ -224,4 +223,188 @@ func (b *bot) buttonsCaseConfrontoRegione() ([]byte, error) {
 	}
 
 	return buttons, nil
+}
+
+func (b *bot) buttonsConfrontoNazioneGroups(attributeIndex int) ([]byte, error) {
+	attributeNames := []string{"Ricoverati con sintomi", "Terapia intensiva", "Totale ospedalizzati", "Isolamento domiciliare", "Attualmente positivi", "Nuovi positivi", "Dimessi guariti", "Deceduti", "Totale casi", "Tamponi"}
+
+	extendedAttributeNames := []string{"Andamento"}
+	extendedAttributeNames = append(extendedAttributeNames, attributeNames...)
+	extendedAttributeCallbacks := make([]string, 0)
+	for _, v := range extendedAttributeNames {
+		extendedAttributeCallbacks = append(extendedAttributeCallbacks, strings.ToLower(v)+" nazione groups")
+	}
+	if attributeIndex >= len(extendedAttributeNames) || attributeIndex < 0 {
+		return nil, fmt.Errorf("attributeIndex out of range")
+	}
+
+	if b.isStringFoundInNationChoices(extendedAttributeNames[attributeIndex]) {
+		return nil, fmt.Errorf("already chose")
+	}
+	buttonNames := []string{"«", extendedAttributeNames[attributeIndex], "»", "❌", "✅"}
+	buttonCallbacks := []string{"previous nazione groups", extendedAttributeCallbacks[attributeIndex], "next nazione groups", "annulla nazione groups", "fatto nazione groups"}
+	buttons, err := b.makeButtons(buttonNames, buttonCallbacks, 3)
+	if err != nil {
+		return nil, err
+	}
+
+	return buttons, nil
+}
+
+func (b *bot) buttonsZonesGroups(zoneIndex int) ([]byte, error) {
+	zoneNames := []string{"Sud", "Centro", "Nord"}
+	zoneCallbacks := []string{"sud groups", "centro groups", "nord groups"}
+	if zoneIndex >= len(zoneNames) || zoneIndex < 0 {
+		return nil, fmt.Errorf("attributeIndex out of range")
+	}
+
+	buttonNames := []string{"«", zoneNames[zoneIndex], "»", "❌"}
+	buttonCallbacks := []string{"previous zone groups", zoneCallbacks[zoneIndex], "next zone groups", "annulla zone groups"}
+	buttons, err := b.makeButtons(buttonNames, buttonCallbacks, 3)
+	if err != nil {
+		return nil, err
+	}
+
+	return buttons, nil
+}
+
+func (b *bot) buttonsRegionsGroups(zoneIndex, regionIndex int) ([]byte, error, string, int) {
+	if zoneIndex < 0 || zoneIndex > 2 {
+		return nil, fmt.Errorf("zoneIndex out of range"), "", -1
+	}
+
+	var regionNames []string
+	if zoneIndex == 0 {
+		regionNames = covidgraphs.GetSudRegionsNamesList()
+	} else if zoneIndex == 1 {
+		regionNames = covidgraphs.GetCentroRegionsNamesList()
+	} else if zoneIndex == 2 {
+		regionNames = covidgraphs.GetNordRegionsNamesList()
+	}
+
+	regionCallbacks := make([]string, 0)
+	for _, v := range regionNames {
+		regionCallbacks = append(regionCallbacks, strings.ToLower(v)+" groups")
+	}
+
+	if regionIndex >= len(regionNames) {
+		regionIndex = 0
+	} else if regionIndex < 0 {
+		regionIndex = len(regionNames) - 1
+	}
+
+	buttonNames := []string{"«", regionNames[regionIndex], "»", "❌"}
+	buttonCallbacks := []string{"previous region groups", regionCallbacks[regionIndex], "next region groups", "annulla region groups"}
+	buttons, err := b.makeButtons(buttonNames, buttonCallbacks, 3)
+	if err != nil {
+		return nil, err, "", -1
+	}
+
+	return buttons, nil, strings.ToLower(regionNames[regionIndex]), regionIndex
+}
+
+func (b *bot) buttonsConfrontoRegioneGroups(attributeIndex int) ([]byte, error) {
+	attributeNames := []string{"Ricoverati con sintomi", "Terapia intensiva", "Totale ospedalizzati", "Isolamento domiciliare", "Attualmente positivi", "Nuovi positivi", "Dimessi guariti", "Deceduti", "Totale casi", "Tamponi"}
+	extendedAttributeNames := []string{"Andamento"}
+	extendedAttributeNames = append(extendedAttributeNames, attributeNames...)
+
+	extendedAttributeCallback := make([]string, 0)
+	for _, v := range extendedAttributeNames {
+		extendedAttributeCallback = append(extendedAttributeCallback, strings.ToLower(v)+" region attr groups")
+	}
+	if attributeIndex >= len(extendedAttributeNames) || attributeIndex < 0 {
+		return nil, fmt.Errorf("attributeIndex out of range")
+	}
+
+	if b.isStringFoundInNationChoices(extendedAttributeNames[attributeIndex]) {
+		return nil, fmt.Errorf("already chose")
+	}
+	buttonNames := []string{"«", extendedAttributeNames[attributeIndex], "»", "❌", "✅"}
+	buttonCallbacks := []string{"previous region attr groups", extendedAttributeCallback[attributeIndex], "next region attr groups", "annulla region attr groups", "fatto region attr groups"}
+	buttons, err := b.makeButtons(buttonNames, buttonCallbacks, 3)
+	if err != nil {
+		return nil, err
+	}
+
+	return buttons, nil
+}
+
+func (b *bot) buttonsZonesGroupsP(zoneIndex int) ([]byte, error) {
+	zoneNames := []string{"Sud", "Centro", "Nord"}
+	zoneCallbacks := []string{"sud p groups", "centro p groups", "nord p groups"}
+	if zoneIndex >= len(zoneNames) || zoneIndex < 0 {
+		return nil, fmt.Errorf("attributeIndex out of range")
+	}
+
+	buttonNames := []string{"«", zoneNames[zoneIndex], "»", "❌"}
+	buttonCallbacks := []string{"previous zone p groups", zoneCallbacks[zoneIndex], "next zone p groups", "annulla zone p groups"}
+	buttons, err := b.makeButtons(buttonNames, buttonCallbacks, 3)
+	if err != nil {
+		return nil, err
+	}
+
+	return buttons, nil
+}
+
+func (b *bot) buttonsRegionsGroupsP(zoneIndex, regionIndex int) ([]byte, error, string, int) {
+	if zoneIndex < 0 || zoneIndex > 2 {
+		return nil, fmt.Errorf("zoneIndex out of range"), "", -1
+	}
+
+	var regionNames []string
+	if zoneIndex == 0 {
+		regionNames = covidgraphs.GetSudRegionsNamesList()
+	} else if zoneIndex == 1 {
+		regionNames = covidgraphs.GetCentroRegionsNamesList()
+	} else if zoneIndex == 2 {
+		regionNames = covidgraphs.GetNordRegionsNamesList()
+	}
+
+	regionCallbacks := make([]string, 0)
+	for _, v := range regionNames {
+		regionCallbacks = append(regionCallbacks, strings.ToLower(v)+" p groups")
+	}
+
+	if regionIndex >= len(regionNames) {
+		regionIndex = 0
+	} else if regionIndex < 0 {
+		regionIndex = len(regionNames) - 1
+	}
+
+	buttonNames := []string{"«", regionNames[regionIndex], "»", "❌"}
+	buttonCallbacks := []string{"previous region p groups", regionCallbacks[regionIndex], "next region p groups", "annulla region p groups"}
+	buttons, err := b.makeButtons(buttonNames, buttonCallbacks, 3)
+	if err != nil {
+		return nil, err, "", -1
+	}
+
+	return buttons, nil, strings.ToLower(regionNames[regionIndex]), regionIndex
+}
+
+func (b *bot) buttonsProvincesGroup(provinceIndex int, regionName string) ([]byte, error, string, int) {
+	provinces := covidgraphs.GetLastProvincesByRegionName(&provincesData, strings.ToLower(regionName))
+	provinceNames := make([]string, 0)
+	for _, v := range *provinces {
+		provinceNames = append(provinceNames, v.Denominazione_provincia)
+	}
+	provinceCallbacks := make([]string, 0)
+	for _, v := range *provinces {
+		provinceCallbacks = append(provinceCallbacks, strings.ToLower(v.Denominazione_provincia)+" province")
+	}
+
+	if provinceIndex >= len(provinceNames) {
+		provinceIndex = 0
+	} else if provinceIndex < 0 {
+		provinceIndex = len(provinceNames) - 1
+	}
+
+	buttonNames := []string{"«", provinceNames[provinceIndex], "»", "❌"}
+	buttonCallbacks := []string{"previous province groups", provinceCallbacks[provinceIndex], "next province groups", "annulla province groups"}
+
+	buttons, err := b.makeButtons(buttonNames, buttonCallbacks, 3)
+	if err != nil {
+		return nil, err, "", -1
+	}
+
+	return buttons, nil, strings.ToLower(provinceNames[provinceIndex]), provinceIndex
 }

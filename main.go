@@ -33,6 +33,10 @@ type bot struct {
 	lastProvince            string   // Callback of the last pressed button in case it is a province name
 	choicesConfrontoNazione []string // National fields selected for comparison
 	choicesConfrontoRegione []string // Regional fields selected for comparison
+	lastGroupRegionIndex    int
+	lastGroupAttrIndex      int
+	lastZoneIndex           int
+	lastGroupProvinceIndex  int
 }
 
 var nationData []covidgraphs.NationData      // National data array
@@ -133,12 +137,18 @@ func (b *bot) Update(update *echotron.Update) {
 			b.sendHelp(update)
 		} else if keywords[0] == "/home" || keywords[0] == "/home"+botUsername {
 			b.sendHome(update)
-		} else if keywords[0] == "/nazione" || keywords[0] == "/nazione"+botUsername {
+		} else if keywords[0] == "/nazione" {
 			b.textNation(update)
-		} else if keywords[0] == "/regione" || keywords[0] == "/regione"+botUsername {
+		} else if keywords[0] == "/nazione"+botUsername {
+			b.inGroupTextNation(update.Message.Chat.ID)
+		} else if keywords[0] == "/regione" {
 			b.textRegion(update)
-		} else if keywords[0] == "/provincia" || keywords[0] == "/provincia"+botUsername {
+		} else if keywords[0] == "/regione"+botUsername {
+			b.inGroupTextRegions(update.Message.Chat.ID)
+		} else if keywords[0] == "/provincia" {
 			b.textProvince(update)
+		} else if keywords[0] == "/provincia"+botUsername {
+			b.inGroupTextProvinces(update.Message.Chat.ID)
 		} else if keywords[0] == "/reports" || keywords[0] == "/reports"+botUsername {
 			b.textReport(update)
 		} else if keywords[0] == "/credits" || keywords[0] == "/credits"+botUsername {
@@ -147,7 +157,6 @@ func (b *bot) Update(update *echotron.Update) {
 
 	} else if update.CallbackQuery != nil {
 		cq := update.CallbackQuery
-		fmt.Println(cq.Data)
 		switch strings.ToLower(cq.Data) {
 		case "credits":
 			b.sendCredits(update.CallbackQuery.Message.Chat.ID)
@@ -209,6 +218,7 @@ func (b *bot) Update(update *echotron.Update) {
 			break
 
 		default:
+			//DON'T CHANGE THIS ORDER, OR CALLBACK HANDLING WILL FAIL!
 			if _, err := covidgraphs.FindFirstOccurrenceRegion(&regionsData, "denominazione_regione", cq.Data); err == nil {
 				b.caseRegion(cq)
 			} else if _, err = covidgraphs.FindFirstOccurrenceProvince(&provincesData, "denominazione_provincia", cq.Data); err == nil {
@@ -216,6 +226,20 @@ func (b *bot) Update(update *echotron.Update) {
 			} else if err = b.caseConfrontoRegione(cq); err == nil {
 				break
 			} else if err = b.caseConfrontoNazione(cq); err == nil {
+				break
+			} else if err = b.caseInGroupNationAttr(cq); err == nil {
+				break
+			} else if err = b.caseInGroupZoneP(cq); err == nil {
+				break
+			} else if err = b.caseInGroupRegionP(cq); err == nil {
+				break
+			} else if err = b.caseInGroupProvince(cq); err == nil {
+				break
+			} else if err = b.caseInGroupZone(cq); err == nil {
+				break
+			} else if err = b.caseInGroupRegionAttr(cq); err == nil {
+				break
+			} else if err = b.caseInGroupRegion(cq); err == nil {
 				break
 			} else {
 				log.Println("dati callback incorretti")

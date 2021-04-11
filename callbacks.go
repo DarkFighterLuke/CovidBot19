@@ -259,7 +259,7 @@ func (b *bot) callbackGeneraFile(cq *echotron.CallbackQuery) {
 		filename := "report generale-" + time.Now().Format("20060102T150405") + ".txt"
 		f, err := os.Create(filename)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			return
 		}
 		_, err = f.WriteString(msg)
@@ -600,7 +600,6 @@ func (b *bot) caseConfrontoNazione(cq *echotron.CallbackQuery) error {
 
 		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
 		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
-		break
 	case "tamponi nazione":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "tamponi")
 		buttons, err := b.buttonsCaseConfrontoNazione()
@@ -621,4 +620,730 @@ func (b *bot) caseConfrontoNazione(cq *echotron.CallbackQuery) error {
 	}
 
 	return nil
+}
+
+// Handles in group callbacks for selected nation fields to compare
+func (b *bot) caseInGroupNationAttr(cq *echotron.CallbackQuery) error {
+	switch strings.ToLower(cq.Data) {
+	case "andamento nazione groups":
+		b.DeleteMessage(cq.Message.Chat.ID, cq.Message.ID)
+		b.sendAndamentoNazionale(cq.Message)
+		break
+	case "previous nazione groups":
+		id := b.lastGroupAttrIndex
+	redoPrevious:
+		if id <= 0 {
+			id = 9
+		} else {
+			id--
+		}
+
+		buttons, err := b.buttonsConfrontoNazioneGroups(id)
+		if err != nil {
+			if err.Error() == "already chose" {
+				goto redoPrevious
+			}
+			log.Println(err)
+			return err
+		}
+
+		b.lastGroupAttrIndex = id
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+	case "next nazione groups":
+		id := b.lastGroupAttrIndex
+	redoNext:
+		if id >= 9 {
+
+			id = 0
+		} else {
+			id++
+		}
+
+		buttons, err := b.buttonsConfrontoNazioneGroups(id)
+		if err != nil {
+			if err.Error() == "already chose" {
+				goto redoNext
+			}
+			log.Println(err)
+			return err
+		}
+
+		b.lastGroupAttrIndex = id
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+
+	case "annulla nazione groups":
+		b.DeleteMessage(cq.Message.Chat.ID, cq.Message.ID)
+		break
+
+	case "ricoverati con sintomi nazione groups":
+		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "ricoverati con sintomi")
+		buttons, err := b.buttonsConfrontoNazioneGroups(1)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 1
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "terapia intensiva nazione groups":
+		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "terapia intensiva")
+		buttons, err := b.buttonsConfrontoNazioneGroups(2)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 2
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "totale ospedalizzati nazione groups":
+		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "totale ospedalizzati")
+		buttons, err := b.buttonsConfrontoNazioneGroups(3)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 3
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "isolamento domiciliare nazione groups":
+		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "isolamento domiciliare")
+		buttons, err := b.buttonsConfrontoNazioneGroups(4)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 4
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "attualmente positivi nazione groups":
+		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "attualmente positivi")
+		buttons, err := b.buttonsConfrontoNazioneGroups(5)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 5
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "nuovi positivi nazione groups":
+		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "nuovi positivi")
+		buttons, err := b.buttonsConfrontoNazioneGroups(6)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 6
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "dimessi guariti nazione groups":
+		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "dimessi guariti")
+		buttons, err := b.buttonsConfrontoNazioneGroups(7)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 7
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "deceduti nazione groups":
+		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "deceduti")
+		buttons, err := b.buttonsConfrontoNazioneGroups(8)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 8
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "totale casi nazione groups":
+		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "totale casi")
+		buttons, err := b.buttonsConfrontoNazioneGroups(9)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 9
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "tamponi nazione groups":
+		b.choicesConfrontoNazione = append(b.choicesConfrontoRegione, "tamponi")
+		buttons, err := b.buttonsConfrontoNazioneGroups(10)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 10
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "fatto nazione groups":
+		b.DeleteMessage(cq.Message.Chat.ID, cq.Message.ID)
+		if len(b.choicesConfrontoNazione) == 0 {
+			b.sendAndamentoNazionale(cq.Message)
+		} else {
+			b.sendConfrontoDatiNazione(cq)
+		}
+		b.choicesConfrontoRegione = make([]string, 0)
+		b.lastGroupRegionIndex = 0
+		b.lastZoneIndex = 0
+		b.lastGroupAttrIndex = 0
+		break
+	default:
+		return fmt.Errorf("not a confronto nazione case")
+	}
+
+	return nil
+}
+
+// Handles in group callbacks for selected region fields to compare
+func (b *bot) caseInGroupRegionAttr(cq *echotron.CallbackQuery) error {
+	switch strings.ToLower(cq.Data) {
+	case "andamento region attr groups":
+		regionIndex, err := covidgraphs.FindLastOccurrenceRegion(&regionsData, "denominazione_regione", b.lastRegion)
+		if err != nil {
+			return err
+		}
+		b.DeleteMessage(cq.Message.Chat.ID, cq.Message.ID)
+		b.sendAndamentoRegionale(cq.Message, regionIndex)
+		break
+	case "previous region attr groups":
+		id := b.lastGroupAttrIndex
+	redoPrevious:
+		if id <= 0 {
+			id = 10
+		} else {
+			id--
+		}
+
+		buttons, err := b.buttonsConfrontoRegioneGroups(id)
+		if err != nil {
+			if err.Error() == "already chose" {
+				goto redoPrevious
+			}
+			log.Println(err)
+			return err
+		}
+
+		b.lastGroupAttrIndex = id
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+	case "next region attr groups":
+		id := b.lastGroupAttrIndex
+	redoNext:
+		if id >= 10 {
+
+			id = 0
+		} else {
+			id++
+		}
+
+		buttons, err := b.buttonsConfrontoRegioneGroups(id)
+		if err != nil {
+			if err.Error() == "already chose" {
+				goto redoNext
+			}
+			log.Println(err)
+			return err
+		}
+
+		b.lastGroupAttrIndex = id
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+
+	case "annulla region attr groups":
+		b.DeleteMessage(cq.Message.Chat.ID, cq.Message.ID)
+		break
+
+	case "ricoverati con sintomi region attr groups":
+		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "ricoverati con sintomi")
+		buttons, err := b.buttonsConfrontoRegioneGroups(1)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 1
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "terapia intensiva region attr groups":
+		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "terapia intensiva")
+		buttons, err := b.buttonsConfrontoRegioneGroups(2)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 2
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "totale ospedalizzati region attr groups":
+		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "totale ospedalizzati")
+		buttons, err := b.buttonsConfrontoRegioneGroups(3)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 3
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "isolamento domiciliare region attr groups":
+		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "isolamento domiciliare")
+		buttons, err := b.buttonsConfrontoRegioneGroups(4)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 4
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "attualmente positivi region attr groups":
+		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "attualmente positivi")
+		buttons, err := b.buttonsConfrontoRegioneGroups(5)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 5
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "nuovi positivi region attr groups":
+		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "nuovi positivi")
+		buttons, err := b.buttonsConfrontoRegioneGroups(6)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 6
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "dimessi guariti region attr groups":
+		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "dimessi guariti")
+		buttons, err := b.buttonsConfrontoRegioneGroups(7)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 7
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "deceduti region attr groups":
+		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "deceduti")
+		buttons, err := b.buttonsConfrontoRegioneGroups(8)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 8
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "totale casi region attr groups":
+		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "totale casi")
+		buttons, err := b.buttonsConfrontoRegioneGroups(9)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 9
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "tamponi region attr groups":
+		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "tamponi")
+		buttons, err := b.buttonsConfrontoRegioneGroups(10)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupAttrIndex = 10
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "Aggiunto al confronto", false)
+		break
+	case "fatto region attr groups":
+		b.DeleteMessage(cq.Message.Chat.ID, cq.Message.ID)
+		if len(b.choicesConfrontoRegione) == 0 {
+			regionIndex, err := covidgraphs.FindLastOccurrenceRegion(&regionsData, "denominazione_regione", b.lastRegion)
+			if err != nil {
+				return err
+			}
+			b.sendAndamentoRegionale(cq.Message, regionIndex)
+		} else {
+			b.sendConfrontoDatiRegione(cq)
+		}
+		b.choicesConfrontoRegione = make([]string, 0)
+		b.lastGroupRegionIndex = 0
+		b.lastZoneIndex = 0
+		b.lastGroupAttrIndex = 0
+		b.lastRegion = ""
+		break
+	default:
+		return fmt.Errorf("not a confronto nazione groups case")
+	}
+
+	return nil
+}
+
+func (b *bot) caseInGroupZone(cq *echotron.CallbackQuery) error {
+	switch strings.ToLower(cq.Data) {
+	case "previous zone groups":
+		id := b.lastGroupAttrIndex
+	redoPrevious:
+		if id <= 0 {
+			id = 2
+		} else {
+			id--
+		}
+
+		buttons, err := b.buttonsZonesGroups(id)
+		if err != nil {
+			if err.Error() == "already chose" {
+				goto redoPrevious
+			}
+			log.Println(err)
+			return err
+		}
+
+		b.lastGroupAttrIndex = id
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+	case "next zone groups":
+		id := b.lastGroupAttrIndex
+	redoNext:
+		if id >= 2 {
+
+			id = 0
+		} else {
+			id++
+		}
+
+		buttons, err := b.buttonsZonesGroups(id)
+		if err != nil {
+			if err.Error() == "already chose" {
+				goto redoNext
+			}
+			log.Println(err)
+			return err
+		}
+
+		b.lastGroupAttrIndex = id
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+
+	case "annulla zone groups":
+		b.lastGroupAttrIndex = 0
+		b.lastGroupRegionIndex = 0
+		b.DeleteMessage(cq.Message.Chat.ID, cq.Message.ID)
+		break
+	case "sud groups":
+		buttons, err, lastRegionName, _ := b.buttonsRegionsGroups(0, 0)
+		if err != nil {
+			return err
+		}
+
+		b.lastZoneIndex = 0
+		b.lastGroupAttrIndex = 0
+		b.lastGroupRegionIndex = 0
+		b.lastRegion = lastRegionName
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+	case "centro groups":
+		buttons, err, lastRegionName, _ := b.buttonsRegionsGroups(1, 0)
+		if err != nil {
+			return err
+		}
+
+		b.lastZoneIndex = 1
+		b.lastGroupAttrIndex = 0
+		b.lastGroupRegionIndex = 0
+		b.lastRegion = lastRegionName
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+	case "nord groups":
+		buttons, err, lastRegionName, _ := b.buttonsRegionsGroups(2, 0)
+		if err != nil {
+			return err
+		}
+
+		b.lastZoneIndex = 2
+		b.lastGroupAttrIndex = 0
+		b.lastGroupRegionIndex = 0
+		b.lastRegion = lastRegionName
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+
+	default:
+		return fmt.Errorf("not a zone groups case")
+	}
+
+	return nil
+}
+
+func (b *bot) caseInGroupRegion(cq *echotron.CallbackQuery) error {
+	switch strings.ToLower(cq.Data) {
+	case "previous region groups":
+		id := b.lastGroupRegionIndex
+		id--
+
+		buttons, err, lastRegionName, lastIndex := b.buttonsRegionsGroups(b.lastZoneIndex, id)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupRegionIndex = lastIndex
+		b.lastRegion = lastRegionName
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+	case "next region groups":
+		id := b.lastGroupRegionIndex
+		id++
+
+		buttons, err, lastRegionName, lastIndex := b.buttonsRegionsGroups(b.lastZoneIndex, id)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupRegionIndex = lastIndex
+		b.lastRegion = lastRegionName
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+
+	case "annulla region groups":
+		b.lastRegion = ""
+		b.DeleteMessage(cq.Message.Chat.ID, cq.Message.ID)
+		break
+	}
+	_, err := covidgraphs.FindLastOccurrenceRegion(&regionsData, "denominazione_regione", strings.Replace(cq.Data, " groups", "", -1))
+	if err == nil {
+		buttons, err := b.buttonsConfrontoRegioneGroups(0)
+		if err != nil {
+			return err
+		}
+
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+	}
+
+	return nil
+}
+
+func (b *bot) caseInGroupZoneP(cq *echotron.CallbackQuery) error {
+	switch strings.ToLower(cq.Data) {
+	case "previous zone p groups":
+		id := b.lastGroupAttrIndex
+	redoPrevious:
+		if id <= 0 {
+			id = 2
+		} else {
+			id--
+		}
+
+		buttons, err := b.buttonsZonesGroupsP(id)
+		if err != nil {
+			if err.Error() == "already chose" {
+				goto redoPrevious
+			}
+			log.Println(err)
+			return err
+		}
+
+		b.lastGroupAttrIndex = id
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+	case "next zone p groups":
+		id := b.lastGroupAttrIndex
+	redoNext:
+		if id >= 2 {
+
+			id = 0
+		} else {
+			id++
+		}
+
+		buttons, err := b.buttonsZonesGroupsP(id)
+		if err != nil {
+			if err.Error() == "already chose" {
+				goto redoNext
+			}
+			log.Println(err)
+			return err
+		}
+
+		b.lastGroupAttrIndex = id
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+
+	case "annulla zone p groups":
+		b.lastGroupAttrIndex = 0
+		b.lastGroupRegionIndex = 0
+		b.DeleteMessage(cq.Message.Chat.ID, cq.Message.ID)
+		break
+	case "sud p groups":
+		buttons, err, lastRegionName, _ := b.buttonsRegionsGroupsP(0, 0)
+		if err != nil {
+			return err
+		}
+
+		b.lastZoneIndex = 0
+		b.lastGroupAttrIndex = 0
+		b.lastGroupRegionIndex = 0
+		b.lastRegion = lastRegionName
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+	case "centro p groups":
+		buttons, err, lastRegionName, _ := b.buttonsRegionsGroupsP(1, 0)
+		if err != nil {
+			return err
+		}
+
+		b.lastZoneIndex = 1
+		b.lastGroupAttrIndex = 0
+		b.lastGroupRegionIndex = 0
+		b.lastRegion = lastRegionName
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+	case "nord p groups":
+		buttons, err, lastRegionName, _ := b.buttonsRegionsGroupsP(2, 0)
+		if err != nil {
+			return err
+		}
+
+		b.lastZoneIndex = 2
+		b.lastGroupAttrIndex = 0
+		b.lastGroupRegionIndex = 0
+		b.lastRegion = lastRegionName
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+
+	default:
+		return fmt.Errorf("not a zone groups case")
+	}
+
+	return nil
+}
+
+func (b *bot) caseInGroupRegionP(cq *echotron.CallbackQuery) error {
+	switch strings.ToLower(cq.Data) {
+	case "previous region p groups":
+		id := b.lastGroupRegionIndex
+		id--
+
+		buttons, err, lastRegionName, lastIndex := b.buttonsRegionsGroupsP(b.lastZoneIndex, id)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupRegionIndex = lastIndex
+		b.lastRegion = lastRegionName
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+	case "next region p groups":
+		id := b.lastGroupRegionIndex
+		id++
+
+		buttons, err, lastRegionName, lastIndex := b.buttonsRegionsGroupsP(b.lastZoneIndex, id)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupRegionIndex = lastIndex
+		b.lastRegion = lastRegionName
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+
+	case "annulla region p groups":
+		b.lastRegion = ""
+		b.DeleteMessage(cq.Message.Chat.ID, cq.Message.ID)
+		break
+	}
+	_, err := covidgraphs.FindLastOccurrenceRegion(&regionsData, "denominazione_regione", strings.Replace(cq.Data, " p groups", "", -1))
+	if err == nil {
+		buttons, err, _, _ := b.buttonsProvincesGroup(0, b.lastRegion)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupProvinceIndex = 0
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+	}
+
+	return err
+}
+
+func (b *bot) caseInGroupProvince(cq *echotron.CallbackQuery) error {
+	switch strings.ToLower(cq.Data) {
+	case "previous province groups":
+		id := b.lastGroupProvinceIndex
+		id--
+
+		buttons, err, lastProvinceName, lastIndex := b.buttonsProvincesGroup(id, b.lastRegion)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupProvinceIndex = lastIndex
+		b.lastProvince = lastProvinceName
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+	case "next province groups":
+		id := b.lastGroupProvinceIndex
+		id++
+
+		buttons, err, lastProvinceName, lastIndex := b.buttonsProvincesGroup(id, b.lastRegion)
+		if err != nil {
+			return err
+		}
+
+		b.lastGroupProvinceIndex = lastIndex
+		b.lastProvince = lastProvinceName
+		b.EditMessageReplyMarkup(cq.Message.Chat.ID, cq.Message.ID, buttons)
+		b.AnswerCallbackQuery(cq.ID, "", false)
+		break
+
+	case "annulla province groups":
+		b.lastRegion = ""
+		b.DeleteMessage(cq.Message.Chat.ID, cq.Message.ID)
+		break
+	}
+	provinceId, err := covidgraphs.FindLastOccurrenceProvince(&provincesData, "denominazione_provincia", strings.Replace(cq.Data, " province", "", -1))
+	if err == nil {
+		b.sendAndamentoProvinciale(cq, provinceId)
+	}
+
+	return err
 }
