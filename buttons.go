@@ -165,18 +165,22 @@ func (b *bot) buttonsConfrontoRegione() ([]byte, error) {
 func (b *bot) buttonsCaseConfrontoNazione() ([]byte, error) {
 	buttonsNames := []string{"Ricoverati con sintomi", "Terapia intensiva", "Totale ospedalizzati", "Isolamento domiciliare", "Attualmente positivi", "Nuovi positivi", "Dimessi guariti", "Deceduti", "Totale casi", "Tamponi"}
 	buttonsCallback := make([]string, 0)
+	for _, v := range buttonsNames {
+		buttonsCallback = append(buttonsCallback, strings.ToLower(v)+" nazione")
+	}
 
 	newButtonsNames := make([]string, 0)
 	newButtonsCallback := make([]string, 0)
 
 	for _, v := range buttonsNames {
 
-		if !b.isStringFoundInNationChoices(v) {
+		if !b.isStringFoundInNationChoices(strings.ToLower(v)) {
 			newButtonsNames = append(newButtonsNames, v)
 		}
 	}
 	for _, v := range buttonsCallback {
 		strStripped := strings.Replace(v, " nazione", "", -1)
+		fmt.Println(strStripped)
 		if !b.isStringFoundInNationChoices(strStripped) {
 			newButtonsCallback = append(newButtonsCallback, strings.ToLower(v))
 		}
@@ -186,6 +190,9 @@ func (b *bot) buttonsCaseConfrontoNazione() ([]byte, error) {
 	newButtonsCallback = append(newButtonsCallback, "annulla")
 	newButtonsNames = append(newButtonsNames, "Fatto ✅")
 	newButtonsCallback = append(newButtonsCallback, "fatto nazione")
+	fmt.Println(b.choicesConfrontoNazione)
+	fmt.Println(newButtonsNames)
+	fmt.Println(newButtonsCallback)
 	buttons, err := b.makeButtons(newButtonsNames, newButtonsCallback, 2)
 	if err != nil {
 		return nil, err
@@ -197,12 +204,15 @@ func (b *bot) buttonsCaseConfrontoNazione() ([]byte, error) {
 func (b *bot) buttonsCaseConfrontoRegione() ([]byte, error) {
 	buttonsNames := []string{"Ricoverati con sintomi", "Terapia intensiva", "Totale ospedalizzati", "Isolamento domiciliare", "Attualmente positivi", "Nuovi positivi", "Dimessi guariti", "Deceduti", "Totale casi", "Tamponi"}
 	buttonsCallback := make([]string, 0)
+	for _, v := range buttonsNames {
+		buttonsCallback = append(buttonsCallback, strings.ToLower(v)+" regione")
+	}
 
 	newButtonsNames := make([]string, 0)
 	newButtonsCallback := make([]string, 0)
 
 	for _, v := range buttonsNames {
-		if !b.isStringFoundInRegionChoices(v) {
+		if !b.isStringFoundInRegionChoices(strings.ToLower(v)) {
 			newButtonsNames = append(newButtonsNames, v)
 		}
 	}

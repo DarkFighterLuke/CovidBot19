@@ -389,7 +389,7 @@ func (b *bot) caseConfrontoRegione(cq *echotron.CallbackQuery) error {
 		buttonsCallback = append(buttonsCallback, strings.ToLower(v)+" regione")
 	}
 
-	switch cq.Data {
+	switch strings.ToLower(cq.Data) {
 	case "ricoverati con sintomi regione":
 		b.choicesConfrontoRegione = append(b.choicesConfrontoRegione, "ricoverati con sintomi")
 		buttons, err := b.buttonsCaseConfrontoRegione()
@@ -510,11 +510,12 @@ func (b *bot) caseConfrontoNazione(cq *echotron.CallbackQuery) error {
 		buttonsCallback = append(buttonsCallback, strings.ToLower(v)+" nazione")
 	}
 
-	switch cq.Data {
+	switch strings.ToLower(cq.Data) {
 	case "ricoverati con sintomi nazione":
 		b.choicesConfrontoNazione = append(b.choicesConfrontoNazione, "ricoverati con sintomi")
 		buttons, err := b.buttonsCaseConfrontoNazione()
 		if err != nil {
+			log.Println(err)
 			return err
 		}
 
