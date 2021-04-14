@@ -15,7 +15,7 @@ func (b *bot) makeButtons(buttonsText []string, callbacksData []string, layoutCo
 	}
 
 	keys := make([]echotron.InlineKbdRow, 0)
-	for i, v := range buttonsText {
+	for i := 0; i < len(buttonsText); {
 		buttons := make([]echotron.InlineButton, 0)
 		for j := 0; j < layoutCols; j++ {
 			if j > len(buttonsText)-i {
