@@ -88,7 +88,7 @@ func newBot(chatId int64) echotron.Bot {
 	}
 }
 
-func checkUpdate(frequency time.Duration, stop chan bool) {
+func checkUpdate(nazione *[]covidgraphs.NationData, regioni *[]covidgraphs.RegionData, province *[]covidgraphs.ProvinceData, note *[]covidgraphs.NoteData, frequency time.Duration, stop chan bool) {
 	_ = gitUpdateChecker.SetRepoInfo("https://github.com/pcm-dpc/COVID-19.git", "master")
 	ch, err := gitUpdateChecker.StartUpdateProcess(frequency)
 	if err != nil {
@@ -99,11 +99,14 @@ func checkUpdate(frequency time.Duration, stop chan bool) {
 		select {
 		case u := <-ch:
 			if u {
-				log.Println("There is a new commit on pandemic data repository. Retrieving data...")
-				updateData(&nationData, &regionsData, &provincesData, &datiNote)()
+				log.Println("There is a new commit on pandemic data repository. Waiting 3 minutes to let update raw files...")
+				time.Sleep(3 * time.Minute)
+				log.Println("Retrieving data...")
+				updateData(nazione, regioni, province, note)()
 			}
 		case s := <-stop:
 			if s {
+				log.Println("Stopping...")
 				return
 			}
 		}
@@ -119,7 +122,7 @@ func main() {
 	// Planning cronjobs to update data from pcm-dpc repo
 	stop := make(chan bool)
 	var cronjob = cron.New()
-	_, _ = cronjob.AddFunc("CRON_TZ=Europe/Rome 00 16 * * *", func() { checkUpdate(30*time.Second, stop) })
+	_, _ = cronjob.AddFunc("CRON_TZ=Europe/Rome 00 16 * * *", func() { checkUpdate(&nationData, &regionsData, &provincesData, &datiNote, 30*time.Second, stop) })
 	_, _ = cronjob.AddFunc("CRON_TZ=Europe/Rome 00 19 * * *", func() { stop <- true })
 	cronjob.Start()
 
@@ -251,32 +254,33 @@ func (b *bot) Update(update *echotron.Update) {
 // Updates data from pcm-dpc repository
 func updateData(nazione *[]covidgraphs.NationData, regioni *[]covidgraphs.RegionData, province *[]covidgraphs.ProvinceData, note *[]covidgraphs.NoteData) func() {
 	return func() {
+		log.Println("Updating data...")
 		mutex.Lock()
 
 		covidgraphs.DeleteAllPlots(workingDirectory + imageFolder)
 
 		ptrNazione, err := covidgraphs.GetNation()
 		if err != nil {
-			log.Println("errore nell'aggiornamento dei dati nazione'")
+			log.Println("errore nell'aggiornamento dei dati nazione")
 			log.Println(err)
 		}
 		*nazione = *ptrNazione
 
 		ptrRegioni, err := covidgraphs.GetRegions()
 		if err != nil {
-			log.Println("errore nell'aggiornamento dei dati zonesButtons'")
+			log.Println("errore nell'aggiornamento dei dati regione")
 		}
 		*regioni = *ptrRegioni
 
 		ptrProvince, err := covidgraphs.GetProvinces()
 		if err != nil {
-			log.Println("errore nell'aggiornamento dei dati province'")
+			log.Println("errore nell'aggiornamento dei dati province")
 		}
 		*province = *ptrProvince
 
 		ptrNote, err := covidgraphs.GetNotes()
 		if err != nil {
-			log.Println("errore nell'aggiornamento dei dati note'")
+			log.Println("errore nell'aggiornamento dei dati note")
 		}
 		*note = *ptrNote
 		mutex.Unlock()
