@@ -89,6 +89,7 @@ func newBot(chatId int64) echotron.Bot {
 }
 
 func checkUpdate(nazione *[]covidgraphs.NationData, regioni *[]covidgraphs.RegionData, province *[]covidgraphs.ProvinceData, note *[]covidgraphs.NoteData, frequency time.Duration, stop chan bool) {
+	log.Println("Starting update checker...")
 	_ = gitUpdateChecker.SetRepoInfo("https://github.com/pcm-dpc/COVID-19.git", "master")
 	ch, err := gitUpdateChecker.StartUpdateProcess(frequency)
 	if err != nil {
@@ -99,14 +100,14 @@ func checkUpdate(nazione *[]covidgraphs.NationData, regioni *[]covidgraphs.Regio
 		select {
 		case u := <-ch:
 			if u {
-				log.Println("There is a new commit on pandemic data repository. Waiting 3 minutes to let update raw files...")
-				time.Sleep(3 * time.Minute)
+				log.Println("There is a new commit on pandemic data repository. Waiting 5 minutes to let update raw files...")
+				time.Sleep(5 * time.Minute)
 				log.Println("Retrieving data...")
 				updateData(nazione, regioni, province, note)()
 			}
 		case s := <-stop:
 			if s {
-				log.Println("Stopping...")
+				log.Println("Stopping update checker...")
 				return
 			}
 		}
