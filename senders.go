@@ -42,7 +42,7 @@ func (b *bot) sendAndamentoRegionale(message *echotron.Message, regionIndex int)
 	}
 
 	dirPath := workingDirectory + imageFolder
-	title := "Dati regione" + regionsData[firstRegionIndex].Denominazione_regione
+	title := "Dati regione " + regionsData[firstRegionIndex].Denominazione_regione
 	var filename string
 
 	filename = dirPath + covidgraphs.FilenameCreator(title)
