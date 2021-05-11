@@ -15,7 +15,7 @@ import (
 
 const (
 	nTopRegions      = 10
-	botDataDirectory = "/CovidBot"
+	botDataDirectory = "CovidBot"
 	imageFolder      = "/plots/"
 	logsFolder       = "/logs/"
 	botUsername      = "@covidata19bot"
@@ -133,6 +133,7 @@ func main() {
 }
 
 func (b *bot) Update(update *echotron.Update) {
+	writeOperation(update, botDataDirectory+logsFolder)
 	if update.Message != nil {
 		keywords := strings.Split(update.Message.Text, " ")
 		if keywords[0] == "/start" || keywords[0] == "/start"+botUsername {

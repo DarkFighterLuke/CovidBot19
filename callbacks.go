@@ -318,7 +318,6 @@ func (b *bot) caseProvince(cq *echotron.CallbackQuery) {
 
 // Handles "Annulla" button callback to go back according to the current context
 func (b *bot) back(cq *echotron.CallbackQuery) {
-	writeOperation(cq)
 	switch b.lastButton {
 	case "zonesButtons":
 		buttons, err := b.mainMenuButtons()

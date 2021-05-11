@@ -40,18 +40,39 @@ func (b *bot) isStringFoundInNationChoices(str string) bool {
 }
 
 // Logs operations to a file named with telegram username/name_surname
-func writeOperation(cq *echotron.CallbackQuery) {
-	data, err := json.Marshal(cq)
+func writeOperation(update *echotron.Update, folder string) {
+	data, err := json.Marshal(update)
 	if err != nil {
-		log.Println(err)
+		log.Println("Error marshaling logs: ", err)
 		return
 	}
 
-	dirPath := workingDirectory + logsFolder
-	filename := dirPath + cq.Message.Chat.Username + ".txt"
-	if cq.Message.Chat.Username == "" {
-		filename = dirPath + cq.Message.Chat.FirstName + "_" + cq.Message.Chat.LastName + ".txt"
+	var filename string
+
+	if update.CallbackQuery != nil {
+		if update.CallbackQuery.Message.Chat.Type == "private" {
+			if update.CallbackQuery.Message.Chat.Username == "" {
+				filename = folder + update.CallbackQuery.Message.Chat.FirstName + "_" + update.CallbackQuery.Message.Chat.LastName + ".txt"
+			} else {
+				filename = folder + update.CallbackQuery.Message.Chat.Username + ".txt"
+			}
+		} else {
+			filename = folder + update.Message.Chat.Title + ".txt"
+		}
+
+	} else if update.Message != nil {
+		if update.Message.Chat.Type == "private" {
+			if update.Message.Chat.Username == "" {
+				filename = folder + update.Message.Chat.FirstName + "_" + update.Message.Chat.LastName + ".txt"
+			} else {
+				filename = folder + update.Message.Chat.Username + ".txt"
+			}
+		} else {
+			filename = folder + update.Message.Chat.Title + ".txt"
+		}
+
 	}
+
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
 		log.Println(err)
@@ -59,7 +80,7 @@ func writeOperation(cq *echotron.CallbackQuery) {
 	}
 
 	dataString := time.Now().Format("2006-01-02T15:04:05") + string(data[:])
-	_, err = f.WriteString(dataString)
+	_, err = f.WriteString(dataString + "\n")
 	if err != nil {
 		log.Println(err)
 		return
@@ -69,7 +90,6 @@ func writeOperation(cq *echotron.CallbackQuery) {
 		log.Println(err)
 		return
 	}
-	log.Println(dataString)
 }
 
 // Sorts regional fields selected for comparison
