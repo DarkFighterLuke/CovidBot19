@@ -120,8 +120,16 @@ func main() {
 	initFolders()
 	updateData(&nationData, &regionsData, &provincesData, &datiNote)()
 
-	// Planning cronjobs to update data from pcm-dpc repo
 	stop := make(chan bool)
+	loc, _ := time.LoadLocation("Europe/Rome")
+	now := time.Now()
+	startHour := time.Date(now.Year(), now.Month(), now.Day(), 16, 00, 00, 00, loc)
+	endHour := time.Date(now.Year(), now.Month(), now.Day(), 19, 00, 00, 00, loc)
+	if time.Now().After(startHour) && time.Now().Before(endHour) {
+		go checkUpdate(&nationData, &regionsData, &provincesData, &datiNote, 30*time.Second, stop)
+	}
+
+	// Planning cronjobs to update data from pcm-dpc repo
 	var cronjob = cron.New()
 	_, _ = cronjob.AddFunc("CRON_TZ=Europe/Rome 00 16 * * *", func() { checkUpdate(&nationData, &regionsData, &provincesData, &datiNote, 30*time.Second, stop) })
 	_, _ = cronjob.AddFunc("CRON_TZ=Europe/Rome 00 19 * * *", func() { stop <- true })
@@ -271,18 +279,21 @@ func updateData(nazione *[]covidgraphs.NationData, regioni *[]covidgraphs.Region
 		ptrRegioni, err := covidgraphs.GetRegions()
 		if err != nil {
 			log.Println("errore nell'aggiornamento dei dati regione")
+			log.Println(err)
 		}
 		*regioni = *ptrRegioni
 
 		ptrProvince, err := covidgraphs.GetProvinces()
 		if err != nil {
 			log.Println("errore nell'aggiornamento dei dati province")
+			log.Println(err)
 		}
 		*province = *ptrProvince
 
 		ptrNote, err := covidgraphs.GetNotes()
 		if err != nil {
 			log.Println("errore nell'aggiornamento dei dati note")
+			log.Println(err)
 		}
 		*note = *ptrNote
 		mutex.Unlock()
