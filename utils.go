@@ -57,7 +57,7 @@ func writeOperation(update *echotron.Update, folder string) {
 				filename = folder + update.CallbackQuery.Message.Chat.Username + ".txt"
 			}
 		} else {
-			filename = folder + update.Message.Chat.Title + ".txt"
+			filename = folder + update.CallbackQuery.Message.Chat.Title + ".txt"
 		}
 
 	} else if update.Message != nil {
