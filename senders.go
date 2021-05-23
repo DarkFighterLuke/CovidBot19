@@ -214,7 +214,7 @@ func (b *bot) sendStart(update *echotron.Update) {
 		}
 
 		messageText :=
-			`Benvenuto <b>%s</b>!Questo bot mette a disposizione i dati dell'epidemia di Coronavirus in Italia con grafici e numeri.
+			`Benvenuto <b>%s</b>! Questo bot mette a disposizione i dati dell'epidemia di Coronavirus in Italia con grafici e numeri.
 Puoi seguire i pulsanti per ottenere comodamente le informazioni che desideri
 
 <b><i>oppure</i></b>
