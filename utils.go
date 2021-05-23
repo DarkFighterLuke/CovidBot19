@@ -13,7 +13,7 @@ import (
 // Creates bot data folders if they don't exist
 func initFolders() {
 	currentPath, _ := os.Getwd()
-	workingDirectory = currentPath + botDataDirectory
+	workingDirectory = currentPath + "/" + botDataDirectory
 	os.MkdirAll(workingDirectory, 0755)
 	os.MkdirAll(workingDirectory+imageFolder, 0755)
 	os.MkdirAll(workingDirectory+logsFolder, 0755)
