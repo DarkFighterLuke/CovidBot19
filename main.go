@@ -137,7 +137,7 @@ func main() {
 
 	// Creating bot instance using webhook mode
 	dsp := echotron.NewDispatcher(TOKEN, newBot)
-	dsp.ListenWebhook("https://hiddenfile.tk:443/bot/CovidBot", 40987)
+	dsp.ListenWebhook("https://hiddenfile.ml:443/bot/CovidBot", 40987)
 }
 
 func (b *bot) Update(update *echotron.Update) {
